@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "839487885967",
+    "firebase_url": "https://graduation-project-32fe1.firebaseio.com",
+    "project_id": "graduation-project-32fe1",
+    "storage_bucket": "graduation-project-32fe1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839487885967:android:bfb38c507dcaed9ed216fa",
+        "android_client_info": {
+          "package_name": "kr.ceo.codilook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839487885967-2u86bfv7m7j4ieas4rcdqo1hu4mtviqu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbfYa5DLGIqcfP1bBS-MGF8B2oM754bFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839487885967-2u86bfv7m7j4ieas4rcdqo1hu4mtviqu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
