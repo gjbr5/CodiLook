@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="bloodtype">
+    <string-array name="혈액형">
+        <item>--</item>
         <item>A형</item>
         <item>B형</item>
         <item>AB형</item>

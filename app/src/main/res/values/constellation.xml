@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="별자리">
+        <item>--</item>
+        <item>양자리(03.21~04.19)</item>
+        <item>황소자리(04.20~05.20)</item>
+        <item>쌍둥이자리(05.21~06.21)</item>
+        <item>게자리(06.22~07.22)</item>
+        <item>사자자리(07.23~08.22)</item>
+        <item>처녀자리(08.23~09.23)</item>
+        <item>천칭자리(09.24~10.22)</item>
+        <item>전갈자리(10.23~11.22)</item>
+        <item>궁수자리(11.23~12.24)</item>
+        <item>염소자리(12.25~01.19)</item>
+        <item>물병자리(01.20~02.18)</item>
+        <item>물고기자리(02.19~03.20)</item>
+    </string-array>
+</resources>
