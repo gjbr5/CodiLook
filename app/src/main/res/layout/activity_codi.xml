@@ -20,7 +20,7 @@
         android:typeface="serif" />
 
     <ImageView
-        android:id="@+id/menubar"
+        android:id="@+id/BTN_menu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:srcCompat="@android:drawable/ic_menu_more"

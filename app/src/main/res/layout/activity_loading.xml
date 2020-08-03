@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".loadingActivity2">
+    tools:context=".LoadingActivity">
 
     <TextView
         android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@CodiLook"
+        android:text="@string/copyright"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="161dp"
         android:layout_height="48dp"
         android:layout_marginBottom="28dp"
-        android:text="CoidLook"
+        android:text="@string/app_name"
         android:textColor="#FF9800"
         android:textColorHighlight="#FF9800"
         android:textSize="36sp"
