@@ -20,7 +20,7 @@
         android:typeface="serif" />
 
     <ImageView
-        android:id="@+id/BTN_menu"
+        android:id="@+id/IMG_menu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -64,17 +64,11 @@
                 android:id="@+id/ET_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="8"
                 android:autofillHints="email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/BT_login_confirm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="@string/check_duplicate"
-                android:textSize="14sp" />
         </TableRow>
 
         <TableRow
@@ -101,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:autofillHints="password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="16sp" />
 
         </TableRow>
 
@@ -129,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:autofillHints="password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="16sp" />
 
         </TableRow>
 
@@ -145,18 +141,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/SP_bloodType"
+                android:labelFor="@id/SP_blood_type"
                 android:text="@string/prompt_bloodtype"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/SP_bloodType"
+                android:id="@+id/SP_blood_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:entries="@array/혈액형" />
+                android:entries="@array/혈액형"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
 
         </TableRow>
 
@@ -183,7 +181,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:entries="@array/별자리" />
+                android:entries="@array/별자리"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
         </TableRow>
 
         <TableRow
@@ -209,7 +209,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:entries="@array/mbti" />
+                android:entries="@array/mbti"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
 
             <Button
                 android:id="@+id/BT_mbti_link"
