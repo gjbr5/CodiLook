@@ -8,7 +8,6 @@
     tools:context=".RegisterActivity">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -20,13 +19,12 @@
         android:typeface="serif" />
 
     <ImageView
-        android:id="@+id/IMG_menu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        app:srcCompat="@android:drawable/ic_menu_more"
-        android:contentDescription="@string/prompt_menubar"/>
+        android:contentDescription="@string/desc_menu_bar"
+        app:srcCompat="@android:drawable/ic_menu_more" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,19 +47,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@+id/ET_email"
+                android:labelFor="@id/register_et_email"
                 android:text="@string/prompt_email"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/ET_email"
+                android:id="@+id/register_et_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -78,19 +75,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/ET_password"
+                android:labelFor="@id/register_et_password"
                 android:text="@string/prompt_password"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/ET_password"
+                android:id="@+id/register_et_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -107,19 +103,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_pw_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/ET_pw_confirm"
+                android:labelFor="@id/register_et_pw_confirm"
                 android:text="@string/prompt_password_confirm"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/ET_pw_confirm"
+                android:id="@+id/register_et_pw_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -136,19 +131,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_bloodType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/SP_blood_type"
+                android:labelFor="@id/register_sp_blood_type"
                 android:text="@string/prompt_bloodtype"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/SP_blood_type"
+                android:id="@+id/register_sp_blood_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -165,19 +159,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_constellation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/SP_constellation"
+                android:labelFor="@id/register_sp_constellation"
                 android:text="@string/prompt_constellation"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/SP_constellation"
+                android:id="@+id/register_sp_constellation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -193,19 +186,18 @@
             android:paddingEnd="16dp">
 
             <TextView
-                android:id="@+id/TV_mbti"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/SP_mbti"
+                android:labelFor="@id/register_sp_mbti"
                 android:text="@string/prompt_mbti"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/SP_mbti"
+                android:id="@+id/register_sp_mbti"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -214,7 +206,7 @@
                 android:paddingBottom="10dp" />
 
             <Button
-                android:id="@+id/BT_mbti_link"
+                android:id="@+id/register_btn_mbti_link"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -225,7 +217,7 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/BT_complete"
+        android:id="@+id/register_btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

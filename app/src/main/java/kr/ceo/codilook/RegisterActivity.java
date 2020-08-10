@@ -37,16 +37,16 @@ public class RegisterActivity extends AppCompatActivity {
         registerViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication()))
                 .get(RegisterViewModel.class);
 
-        etEmail = findViewById(R.id.ET_email);
-        etPassword = findViewById(R.id.ET_password);
-        etPwConfirm = findViewById(R.id.ET_pw_confirm);
+        etEmail = findViewById(R.id.register_et_email);
+        etPassword = findViewById(R.id.register_et_password);
+        etPwConfirm = findViewById(R.id.register_et_pw_confirm);
 
-        spBloodType = findViewById(R.id.SP_blood_type);
-        spConstellation = findViewById(R.id.SP_constellation);
-        spMbti = findViewById(R.id.SP_mbti);
+        spBloodType = findViewById(R.id.register_sp_blood_type);
+        spConstellation = findViewById(R.id.register_sp_constellation);
+        spMbti = findViewById(R.id.register_sp_mbti);
 
-        btnMbtiLink = findViewById(R.id.BT_mbti_link);
-        btnComplete = findViewById(R.id.BT_complete);
+        btnMbtiLink = findViewById(R.id.register_btn_mbti_link);
+        btnComplete = findViewById(R.id.register_btn_register);
 
         etEmail.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) checkEmail();

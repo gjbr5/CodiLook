@@ -8,7 +8,6 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -20,12 +19,11 @@
         android:typeface="serif" />
 
     <ImageView
-        android:id="@+id/IMG_menu"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:contentDescription="@string/prompt_menubar"
+        android:contentDescription="@string/desc_menu_bar"
         app:srcCompat="@android:drawable/ic_menu_more" />
 
     <LinearLayout
@@ -41,18 +39,17 @@
             <TableRow android:gravity="center">
 
                 <TextView
-                    android:id="@+id/TV_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:labelFor="@+id/ET_email"
+                    android:labelFor="@+id/login_et_email"
                     android:text="@string/prompt_email"
                     android:textSize="24sp"
                     android:textStyle="italic"
                     android:typeface="serif" />
 
                 <EditText
-                    android:id="@+id/ET_email"
+                    android:id="@+id/login_et_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autofillHints="email"
@@ -63,18 +60,17 @@
             <TableRow android:gravity="center">
 
                 <TextView
-                    android:id="@+id/TV_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:labelFor="@+id/ET_password"
+                    android:labelFor="@+id/login_et_password"
                     android:text="@string/prompt_password"
                     android:textSize="24sp"
                     android:textStyle="italic"
                     android:typeface="serif" />
 
                 <EditText
-                    android:id="@+id/ET_password"
+                    android:id="@+id/login_et_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autofillHints="password"
@@ -84,7 +80,7 @@
         </TableLayout>
 
         <CheckBox
-            android:id="@+id/CB_login"
+            android:id="@+id/login_chk_remember_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -101,7 +97,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/BT_login"
+                android:id="@+id/login_btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="50dp"
@@ -112,7 +108,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/BT_register"
+                android:id="@+id/login_btn_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
@@ -127,27 +123,31 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="9">
 
                 <ImageView
-                    android:id="@+id/IMG_left"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:src="@drawable/picture1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/IMG_right"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:src="@drawable/picture2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.5"
                     tools:ignore="ContentDescription" />
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:layout_width="wrap_content"

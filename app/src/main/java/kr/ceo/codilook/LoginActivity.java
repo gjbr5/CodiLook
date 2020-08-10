@@ -36,12 +36,12 @@ public class LoginActivity extends AppCompatActivity {
             startHomeActivity();
         }
 
-        imgMenu = findViewById(R.id.IMG_menu);
-        etEmail = findViewById(R.id.ET_email);
-        etPassword = findViewById(R.id.ET_password);
-        cbLogin = findViewById(R.id.CB_login);
-        btnLogin = findViewById(R.id.BT_login);
-        btnRegister = findViewById(R.id.BT_register);
+
+        etEmail = findViewById(R.id.login_et_email);
+        etPassword = findViewById(R.id.login_et_password);
+        cbLogin = findViewById(R.id.login_chk_remember_me);
+        btnLogin = findViewById(R.id.login_btn_login);
+        btnRegister = findViewById(R.id.login_btn_register);
 
         btnLogin.setOnClickListener(view -> login());
         btnRegister.setOnClickListener(view -> {

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CodiLook</string>
     <string name="copyright">\@CodiLook</string>
-    <string name="prompt_menubar">메뉴바</string>
+    <string name="desc_menu_bar">메뉴바</string>
     <string name="prompt_email">EMAIL</string>
     <string name="prompt_password">PW</string>
     <string name="prompt_password_confirm">PW확인</string>
@@ -21,4 +21,9 @@
     <string name="unknown_error">알 수 없는 오류가 발생했습니다.</string>
     <string name="login">로그인</string>
     <string name="register">회원가입</string>
+    <string name="score"> 룩에 대한 별점을 남겨주세요 다음 코디에 반영될 수 있습니다.</string>
+    <string name="prev">이전</string>
+    <string name="next">다음</string>
+    <string name="recommend">LOOK 추천받기!!</string>
+    <string name="desc_codi">코디</string>
 </resources>
