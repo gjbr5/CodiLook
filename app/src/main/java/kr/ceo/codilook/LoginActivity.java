@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
             startHomeActivity();
         }
 
-
         etEmail = findViewById(R.id.login_et_email);
         etPassword = findViewById(R.id.login_et_password);
         cbLogin = findViewById(R.id.login_chk_remember_me);

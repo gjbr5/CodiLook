@@ -1,11 +1,17 @@
 package kr.ceo.codilook.model;
 
+import com.google.firebase.auth.FirebaseUser;
+
 public class User {
     public String uid;
     public String email;
     public String bloodType;
     public String constellation;
     public String mbti;
+
+    public User(FirebaseUser firebaseUser) {
+        this(firebaseUser.getUid(), firebaseUser.getEmail());
+    }
 
     public User(String uid, String email) {
         this(uid, email, "", "", "");
@@ -17,5 +23,9 @@ public class User {
         this.bloodType = bloodType;
         this.constellation = constellation;
         this.mbti = mbti;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

@@ -9,11 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.LoginFormState;
 import kr.ceo.codilook.model.LoginRepository;
+import kr.ceo.codilook.model.User;
 
 public class LoginViewModel extends AndroidViewModel {
 
@@ -49,13 +48,13 @@ public class LoginViewModel extends AndroidViewModel {
         loginRepository.logout();
     }
 
-    public FirebaseUser getUser() {
-        return loginRepository.getUser();
+    public User getUser() {
+        return LoginRepository.getUser();
     }
 
     public boolean getAutoLogin() {
         SharedPreferences sp = getApplication().getSharedPreferences("AutoLogin", Context.MODE_PRIVATE);
-        return sp.getBoolean("autoLogin", false) && loginRepository.getUser() != null;
+        return sp.getBoolean("autoLogin", false) && LoginRepository.getUser() != null;
     }
 
     public void setAutoLogin(boolean autoLogin) {
