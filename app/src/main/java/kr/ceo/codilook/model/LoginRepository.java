@@ -72,10 +72,11 @@ public class LoginRepository {
         return result;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public MutableLiveData<Boolean> checkUserCollision(String email) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        auth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> result.setValue(!Objects.requireNonNull(Objects.requireNonNull(
-                task.getResult()).getSignInMethods()).isEmpty()));
+        auth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task ->
+                result.setValue(!task.getResult().getSignInMethods().isEmpty()));
         return result;
     }
 

@@ -1,9 +1,11 @@
-package kr.ceo.codilook.model;
+package kr.ceo.codilook.model.fuzzy;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Fuzzy {
@@ -42,7 +44,7 @@ public class Fuzzy {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static void addResult(Map<Codi, Integer> total, Adjective[] adjectives) {
+    private static void addResult(Map<Codi, Integer> total, Set<Adjective> adjectives) {
         for (Adjective adj : adjectives) {
             int[] score = scores.get(adj);
             for (int i = 0; i < score.length; i++) {

@@ -1,4 +1,4 @@
-package kr.ceo.codilook.model;
+package kr.ceo.codilook.model.fuzzy;
 
 @SuppressWarnings("NonAsciiCharacters")
 public enum Codi {
