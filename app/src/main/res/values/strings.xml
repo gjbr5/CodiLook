@@ -26,4 +26,7 @@
     <string name="next">다음</string>
     <string name="recommend">LOOK 추천받기!!</string>
     <string name="desc_codi">코디</string>
+    <string name="mbti_test">MBTI 검사를 받을 수 있는 링크로 이동하시겠습니까?</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
 </resources>

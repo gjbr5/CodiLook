@@ -12,7 +12,7 @@ public enum MBTI {
 
     public Set<Adjective> toAdjective() {
         Set<Adjective> set = new HashSet<>();
-        
+
         switch (this) {
             case ENFJ:
                 set.add(Adjective.로맨틱한_패션을_선호한다);
