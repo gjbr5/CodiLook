@@ -22,6 +22,8 @@ public class LoginFormValidator {
     }
 
     public static Integer validatePwConfirm(String password, String pwConfirm) {
+        if (!password.equals(pwConfirm))
+            return R.string.password_does_not_match;
         return null;
     }
 

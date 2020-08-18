@@ -6,9 +6,10 @@ import java.util.Set;
 /**
  * 2020.08.12 스타일 표 기준
  */
-public enum BloodType {
+public enum BloodType implements Adjectivizable {
     A, B, O, AB;
 
+    @Override
     public Set<Adjective> toAdjective() {
         Set<Adjective> set = new HashSet<>();
         switch (this) {

@@ -46,12 +46,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         if (!isPwConfirmValid(password, pwConfirm)) return;
 
         if (bloodType.equals("--")) bloodType = "";
+        else bloodType = bloodType.replace("형", "");
+
         if (mbti.equals("--")) mbti = "";
 
-        if (constellation.equals("--"))
-            constellation = "";
-        else
-            constellation = constellation.substring(0, constellation.indexOf("("));
+        if (constellation.equals("--")) constellation = "";
+        else constellation = constellation.substring(0, constellation.indexOf("("));
 
         final String finalBloodType = bloodType;
         final String finalConstellation = constellation;

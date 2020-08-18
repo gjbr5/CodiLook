@@ -7,9 +7,10 @@ import java.util.Set;
  * 2020.08.12 스타일 표 기준
  */
 @SuppressWarnings("SpellCheckingInspection")
-public enum MBTI {
+public enum MBTI implements Adjectivizable {
     ENFJ, ENFP, ENTJ, ENTP, ESFJ, ESFP, ESTJ, ESTP, INFJ, INFP, INTJ, INTP, ISFJ, ISFP, ISTJ, ISTP;
 
+    @Override
     public Set<Adjective> toAdjective() {
         Set<Adjective> set = new HashSet<>();
 

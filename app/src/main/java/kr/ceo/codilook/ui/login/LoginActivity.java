@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import kr.ceo.codilook.HomeActivity;
+import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.LoginRepository;
 import kr.ceo.codilook.model.PreferenceRepository;
