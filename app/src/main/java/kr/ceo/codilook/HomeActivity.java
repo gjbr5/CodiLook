@@ -1,22 +1,24 @@
 package kr.ceo.codilook;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
+
 import kr.ceo.codilook.viewmodel.LoginViewModel;
 
-public class App_informationActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     LoginViewModel loginViewModel;
 
+    Button btn_recommend;//추천받기 버튼
     Button drawer_btn_Logout;
 
     TextView drawer_tv_LoginModify;
@@ -29,7 +31,7 @@ public class App_informationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_information);
+        setContentView(R.layout.activity_home);
 
         //------------------메뉴바 코드 시작---------------------------------
         loginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
@@ -94,5 +96,12 @@ public class App_informationActivity extends AppCompatActivity {
             finish();
         });
         //------------------메뉴바 코드 끝---------------------------------
+
+        btn_recommend = findViewById(R.id.home_btn_recommend);
+        btn_recommend.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), CodiActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }

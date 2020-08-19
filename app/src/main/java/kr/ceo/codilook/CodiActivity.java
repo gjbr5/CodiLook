@@ -1,19 +1,21 @@
 package kr.ceo.codilook;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
+
+import kr.ceo.codilook.model.fuzzy.Fuzzy;
 import kr.ceo.codilook.viewmodel.LoginViewModel;
 
-public class App_informationActivity extends AppCompatActivity {
+public class CodiActivity extends AppCompatActivity {
 
     LoginViewModel loginViewModel;
 
@@ -26,10 +28,17 @@ public class App_informationActivity extends AppCompatActivity {
     ImageView drawer_img_Menu;
     ImageView drawer_img_CloseMenu;
 
+    ImageView img_rew;//앞으로 가기
+    ImageView img_codi;//코디 추천 이미지
+    ImageView img_ff;//뒤로 가기
+    ImageView codi_img_GoHome;
+
+    RatingBar ratingBar;//코디 추천 별점
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_information);
+        setContentView(R.layout.activity_codi);
 
         //------------------메뉴바 코드 시작---------------------------------
         loginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
@@ -94,5 +103,13 @@ public class App_informationActivity extends AppCompatActivity {
             finish();
         });
         //------------------메뉴바 코드 끝---------------------------------
+
+        codi_img_GoHome = findViewById(R.id.ly_codi_img_GoHome);
+
+        codi_img_GoHome.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }
