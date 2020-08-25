@@ -4,13 +4,15 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import kr.ceo.codilook.model.fuzzy.Codi;
 
@@ -30,17 +32,21 @@ public class StorageRepository {
         return instance;
     }
 
-    public Bitmap getImageFromFile(Codi codi, int number) throws FileNotFoundException {
-        String filename = codi.name() + number + ".png";
-        FileInputStream fis = app.openFileInput(filename);
-        return BitmapFactory.decodeStream(fis);
+    public void getImage(StorageReference ref, OnSuccessListener<Bitmap> onSuccessListener) {
+        final String filename = ref.getName();
+        Task<Bitmap> task = Tasks.call(() -> BitmapFactory.decodeStream(app.openFileInput(filename)));
+        task.addOnSuccessListener(onSuccessListener);
+        task.addOnFailureListener(e -> {
+            FileDownloadTask task1 = ref.getFile(new File(app.getFilesDir(), ref.getName()));
+            task1.addOnSuccessListener(t -> {
+                Task<Bitmap> task2 = Tasks.call(() -> BitmapFactory.decodeStream(app.openFileInput(filename)));
+                task2.addOnSuccessListener(onSuccessListener);
+            });
+        });
     }
 
-    public FileDownloadTask getImageFromFirebase(Codi codi, int number) {
-        String filename = codi.name() + number;
-        String path = codi.name() + "/" + filename + ".png";
-        StorageReference ref = storage.getReference(path);
-        File localFile = new File(app.getFilesDir(), filename + ".png");
-        return ref.getFile(localFile);
+    public Task<ListResult> getList(Codi codi) {
+        StorageReference ref = storage.getReference(codi.name());
+        return ref.listAll();
     }
 }

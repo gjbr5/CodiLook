@@ -2,6 +2,7 @@ package kr.ceo.codilook.model;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import kr.ceo.codilook.model.fuzzy.Adjectivizable;
 import kr.ceo.codilook.model.fuzzy.BloodType;
 import kr.ceo.codilook.model.fuzzy.Constellation;
 import kr.ceo.codilook.model.fuzzy.MBTI;
@@ -35,5 +36,9 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public Adjectivizable[] getAdjectivizables() {
+        return new Adjectivizable[]{bloodType, constellation, mbti};
     }
 }

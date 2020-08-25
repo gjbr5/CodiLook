@@ -25,21 +25,17 @@ public class LoginPresenter implements LoginContract.Presenter {
         if (!isEmailValid(email)) return;
         if (!isPasswordValid(password)) return;
         view.waitForLogin();
-        loginRepository.login(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                loginRepository.getUserInfo();
-                preferenceRepository.setAutoLogin(autoLogin);
-                view.onLoginComplete(true);
-            } else {
-                Exception ex = task.getException();
-                if (ex instanceof FirebaseAuthInvalidUserException)
-                    view.setEmailError(R.string.user_not_found);
-                else if (ex instanceof FirebaseAuthInvalidCredentialsException)
-                    view.setPasswordError(R.string.wrong_password);
-                else
-                    view.showErrorMessage(R.string.unknown_error);
-                view.onLoginComplete(false);
-            }
+        loginRepository.login(email, password).addOnSuccessListener(authResult -> {
+            preferenceRepository.setAutoLogin(autoLogin);
+            loginRepository.getUserInfo(view::onLoginComplete);
+        }).addOnFailureListener(e -> {
+            if (e instanceof FirebaseAuthInvalidUserException)
+                view.setEmailError(R.string.user_not_found);
+            else if (e instanceof FirebaseAuthInvalidCredentialsException)
+                view.setPasswordError(R.string.wrong_password);
+            else
+                view.showErrorMessage(R.string.unknown_error);
+            view.onLoginComplete(false);
         });
     }
 
@@ -60,6 +56,6 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void autoLogin() {
         if (preferenceRepository.getAutoLogin() && LoginRepository.getUser() != null)
-            view.onLoginComplete(true);
+            loginRepository.getUserInfo(view::onLoginComplete);
     }
 }

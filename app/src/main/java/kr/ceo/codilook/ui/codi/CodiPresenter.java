@@ -1,71 +1,114 @@
 package kr.ceo.codilook.ui.codi;
 
-import android.util.Log;
+import android.graphics.Bitmap;
 
-import java.io.FileNotFoundException;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.TreeMap;
 
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 
 public class CodiPresenter implements CodiContract.Presenter {
-    public CodiContract.View view;
-    StorageRepository storageRepository;
-    private ArrayList<Codi> codiList = null;
     private int codiNum = 0;
-    private int imgNum = 1;
+    private int imgNum = 0;
+    private CodiContract.View view;
+    private StorageRepository storageRepository;
+    private Map<Integer, ImageList> imgList = new TreeMap<>();
 
-    public CodiPresenter(CodiContract.View view, StorageRepository storageRepository) {
+    public CodiPresenter(CodiContract.View view, StorageRepository storageRepository, ArrayList<Codi> codiList) {
         this.view = view;
         this.storageRepository = storageRepository;
-    }
-
-    private void getImageFromRepository() {
-        try {
-            view.showImage(storageRepository.getImageFromFile(codiList.get(codiNum), imgNum));
-        } catch (FileNotFoundException ex) {
-            storageRepository.getImageFromFirebase(codiList.get(codiNum), imgNum).addOnSuccessListener(taskSnapshot -> {
-                try {
-                    view.showImage(storageRepository.getImageFromFile(codiList.get(codiNum), imgNum));
-                } catch (FileNotFoundException e) {
-                    Log.e("getImageFromRepository", e.toString());
-                }
-            });
+        for (int i = 0; i < 3; i++) {
+            addList(i, codiList.get(i));
         }
     }
 
-    @Override
-    public void getImage(ArrayList<Codi> codiList) {
-        this.codiList = codiList;
-        imgNum = 1;
-        getImageFromRepository();
+    private void addList(int idx, Codi codi) {
+        ImageList imageList = new ImageList(codi);
+        imgList.put(idx, imageList); // Init imgList
+
+        storageRepository.getList(codi).addOnSuccessListener(listResult -> {
+            Random random = new Random();
+            List<StorageReference> listReference = listResult.getItems();
+            while (listReference.size() > 3)
+                listReference.remove(random.nextInt(listReference.size()));
+            if (idx == 0) {
+                for (int i = 0; i < listReference.size(); i++) {
+                    StorageReference ref = listReference.get(i);
+                    if (i == 0)
+                        storageRepository.getImage(ref, bitmap -> {
+                            imageList.add(bitmap);
+                            view.showImage(bitmap);
+                        });
+                    else
+                        storageRepository.getImage(ref, imageList::add);
+                }
+            } else {
+                for (StorageReference ref : listReference) {
+                    storageRepository.getImage(ref, imageList::add);
+                }
+            }
+        });
     }
 
     @Override
     public void prevImage() {
-        if (imgNum == 1) {
+        if (imgNum == 0) {
             codiNum -= 1;
-            imgNum = 5;
+            imgNum = 2;
         } else
             imgNum -= 1;
 
         view.setNextEnable(true);
-        if (codiNum == 0 && imgNum == 1) {
+        if (codiNum == 0 && imgNum == 0) {
             view.setPrevEnable(false);
         }
-        getImageFromRepository();
+        view.showImage(imgList.get(codiNum).get(imgNum));
+        ImageList list = Objects.requireNonNull(imgList.get(codiNum));
+        view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
     }
 
     @Override
     public void nextImage() {
-        if (imgNum == 5) {
+        if (imgNum == 2) {
             codiNum += 1;
-            imgNum = 1;
+            imgNum = 0;
         } else
             imgNum += 1;
         view.setPrevEnable(true);
-        if (codiNum == 5 && imgNum == 5)
+        if (codiNum == 2 && imgNum == 2)
             view.setNextEnable(false);
-        getImageFromRepository();
+        view.showImage(imgList.get(codiNum).get(imgNum));
+        ImageList list = Objects.requireNonNull(imgList.get(codiNum));
+        view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
+    }
+
+    private static class ImageList {
+        private List<Bitmap> imgList;
+        private Codi codi;
+
+        public ImageList(Codi codi) {
+            this.codi = codi;
+            imgList = new ArrayList<>();
+        }
+
+        public Codi getCodi() {
+            return codi;
+        }
+
+
+        public Bitmap get(int index) {
+            return imgList.get(index);
+        }
+
+        void add(Bitmap image) {
+            imgList.add(image);
+        }
     }
 }

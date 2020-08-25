@@ -2,6 +2,7 @@ package kr.ceo.codilook.model;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +26,7 @@ public class LoginRepository {
     private static LoginRepository instance;
 
     static {
-        instance = null;
+        instance = new LoginRepository();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser() == null ? null : new User(auth.getCurrentUser());
         db = FirebaseDatabase.getInstance();
@@ -35,9 +36,7 @@ public class LoginRepository {
         // For Singleton
     }
 
-    public synchronized static LoginRepository getInstance() {
-        if (instance == null)
-            instance = new LoginRepository();
+    public static LoginRepository getInstance() {
         return instance;
     }
 
@@ -45,29 +44,32 @@ public class LoginRepository {
         return user;
     }
 
-    public void getUserInfo() {
+    public void getUserInfo(OnSuccessListener<Boolean> listener) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser == null) return;
-        DatabaseReference ref = db.getReference("/users/" + currentUser.getUid());
+        user = new User(currentUser);
+        DatabaseReference ref = db.getReference("/users/" + user.getUid());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot children : snapshot.getChildren()) {
-                    String userInfo = Objects.requireNonNull(children.getKey());
-                    switch (userInfo) {
-                        case "BloodType":
-                            user.bloodType = BloodType.valueOf((String) children.getValue());
-                            break;
-                        case "Constellation":
-                            user.constellation = Constellation.valueOf((String) children.getValue());
-                            break;
-                        case "MBTI":
-                            user.mbti = MBTI.valueOf((String) children.getValue());
-                            break;
-                        default:
-                            break;
+                    try {
+                        switch (Objects.requireNonNull(children.getKey())) {
+                            case "BloodType":
+                                user.bloodType = BloodType.valueOf((String) children.getValue());
+                                break;
+                            case "Constellation":
+                                user.constellation = Constellation.valueOf((String) children.getValue());
+                                break;
+                            case "MBTI":
+                                user.mbti = MBTI.valueOf((String) children.getValue());
+                                break;
+                        }
+                    } catch (Exception e) {
+                        listener.onSuccess(false);
                     }
                 }
+                listener.onSuccess(true);
             }
 
             @Override
