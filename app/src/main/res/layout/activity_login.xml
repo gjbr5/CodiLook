@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
         </TableLayout>
 
         <CheckBox
-            android:id="@+id/login_chk_remember_me"
+            android:id="@+id/login_chk_auto_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"

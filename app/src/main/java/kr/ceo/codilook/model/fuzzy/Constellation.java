@@ -7,9 +7,10 @@ import java.util.Set;
  * 2020.08.12 스타일 표 기준
  */
 @SuppressWarnings("NonAsciiCharacters")
-public enum Constellation {
+public enum Constellation implements Adjectivizable{
     양자리, 황소자리, 쌍둥이자리, 게자리, 사자자리, 처녀자리, 천칭자리, 전갈자리, 궁수자리, 염소자리, 물병자리, 물고기자리;
 
+    @Override
     public Set<Adjective> toAdjective() {
         Set<Adjective> set = new HashSet<>();
         switch (this) {

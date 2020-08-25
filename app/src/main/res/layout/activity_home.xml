@@ -1,56 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    android:id="@+id/drawerLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    android:orientation="vertical"
+    tools:context=".ui.main.HomeActivity">
 
-    <!--배경이 될 Layout-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/relative"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp">
-
-        <ImageView
-            android:id="@+id/ly_drawer_img_Menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/desc_menu_bar"
-            android:src="@drawable/menu"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/app_name"
-            android:textColor="@android:color/holo_orange_dark"
-            android:textSize="36sp"
-            android:textStyle="italic"
-            android:typeface="serif" />
-
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="@string/desc_menu_bar"
-        app:srcCompat="@android:drawable/ic_menu_more" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/home_img_btn_prev"
@@ -97,67 +56,5 @@
         android:gravity="bottom"
         android:text="@string/copyright" />
 
-    </LinearLayout>
+</LinearLayout>
 
-    <!--드로어 화면이 될 Layout-->
-    <RelativeLayout
-        android:id="@+id/drawer"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:layout_gravity="start"
-        android:layout_marginVertical="10dp">
-
-        <ImageView
-            android:id="@+id/ly_drawer_img_CloseMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/menu_open"/>
-
-        <TextView
-            android:id="@+id/ly_drawer_tv_LoginModify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ly_drawer_img_CloseMenu"
-            android:layout_marginTop="23dp"
-            android:layout_marginLeft="20dp"
-            android:text="회원 정보 수정"
-            android:textColor="#f70"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/ly_drawer_tv_CodiRecommend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ly_drawer_tv_LoginModify"
-            android:layout_marginTop="23dp"
-            android:layout_marginLeft="20dp"
-            android:text="코디 추천"
-            android:textColor="#f70"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/ly_drawer_tv_AppInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ly_drawer_tv_CodiRecommend"
-            android:layout_marginTop="23dp"
-            android:layout_marginLeft="20dp"
-            android:text="어플 정보"
-            android:textColor="#f70"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/ly_drawer_btn_Logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="로그아웃"
-            android:textColor="#f70"
-            android:textSize="20dp" />
-
-    </RelativeLayout>
-
-</androidx.drawerlayout.widget.DrawerLayout>

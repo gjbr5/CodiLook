@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.register.RegisterActivity">
+    tools:context=".ui.appinfo.AppInfoActivity">
+
+    <ImageView
+        android:id="@+id/my_info_img_title"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/title" />
 
     <TextView
+        android:id="@+id/my_info_tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginVertical="10dp"
-        android:text="@string/app_name"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textSize="36sp"
-        android:textStyle="italic"
-        android:typeface="serif" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:text="@string/register"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/my_info"
         android:textColor="#FF9800"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_info_img_title" />
 
     <TableLayout
+        android:id="@+id/my_info_tl_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_info_tv_title">
 
         <TableRow
             android:layout_marginTop="8dp"
@@ -40,14 +47,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_et_email"
+                android:labelFor="@id/my_info_et_email"
                 android:text="@string/prompt_email"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/register_et_email"
+                android:id="@+id/my_info_et_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -68,14 +75,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_et_password"
+                android:labelFor="@id/my_info_et_password"
                 android:text="@string/prompt_password"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/register_et_password"
+                android:id="@+id/my_info_et_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -96,14 +103,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_et_pw_confirm"
+                android:labelFor="@id/my_info_et_pw_confirm"
                 android:text="@string/prompt_password_confirm"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/register_et_pw_confirm"
+                android:id="@+id/my_info_et_pw_confirm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -124,14 +131,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_sp_blood_type"
+                android:labelFor="@id/my_info_sp_blood_type"
                 android:text="@string/prompt_bloodtype"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/register_sp_blood_type"
+                android:id="@+id/my_info_sp_blood_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -152,14 +159,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_sp_constellation"
+                android:labelFor="@id/my_info_sp_constellation"
                 android:text="@string/prompt_constellation"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/register_sp_constellation"
+                android:id="@+id/my_info_sp_constellation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -179,14 +186,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/register_sp_mbti"
+                android:labelFor="@id/my_info_sp_mbti"
                 android:text="@string/prompt_mbti"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <Spinner
-                android:id="@+id/register_sp_mbti"
+                android:id="@+id/my_info_sp_mbti"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -195,7 +202,7 @@
                 android:paddingBottom="10dp" />
 
             <Button
-                android:id="@+id/register_btn_mbti_link"
+                android:id="@+id/my_info_btn_mbti_link"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -206,21 +213,20 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/register_btn_register"
+        android:id="@+id/my_info_btn_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:text="@string/register" />
-
+        android:layout_marginEnd="16dp"
+        android:text="@string/edit_confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_info_tl_form" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:gravity="bottom"
-        android:text="@string/copyright" />
+        android:layout_height="0dp"
+        android:text="@string/copyright"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

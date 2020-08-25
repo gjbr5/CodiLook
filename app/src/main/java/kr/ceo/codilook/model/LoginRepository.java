@@ -1,50 +1,85 @@
 package kr.ceo.codilook.model;
 
-import android.widget.Toast;
+import androidx.annotation.NonNull;
 
-import androidx.lifecycle.MutableLiveData;
-
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-import kr.ceo.codilook.R;
+import kr.ceo.codilook.model.fuzzy.BloodType;
+import kr.ceo.codilook.model.fuzzy.Constellation;
+import kr.ceo.codilook.model.fuzzy.MBTI;
 
 public class LoginRepository {
     protected static FirebaseAuth auth;
     protected static User user;
+    protected static FirebaseDatabase db;
+    private static LoginRepository instance;
 
     static {
+        instance = new LoginRepository();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser() == null ? null : new User(auth.getCurrentUser());
+        db = FirebaseDatabase.getInstance();
+    }
+
+    private LoginRepository() {
+        // For Singleton
+    }
+
+    public static LoginRepository getInstance() {
+        return instance;
     }
 
     public static User getUser() {
         return user;
     }
 
-    public MutableLiveData<LoginFormState> login(String email, String password) {
-        MutableLiveData<LoginFormState> result = new MutableLiveData<>();
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                user = new User(Objects.requireNonNull(auth.getCurrentUser()));
-                result.setValue(new LoginFormState(true));
-                return;
+    public void getUserInfo(OnSuccessListener<Boolean> listener) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) return;
+        user = new User(currentUser);
+        DatabaseReference ref = db.getReference("/users/" + user.getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot children : snapshot.getChildren()) {
+                    try {
+                        switch (Objects.requireNonNull(children.getKey())) {
+                            case "BloodType":
+                                user.bloodType = BloodType.valueOf((String) children.getValue());
+                                break;
+                            case "Constellation":
+                                user.constellation = Constellation.valueOf((String) children.getValue());
+                                break;
+                            case "MBTI":
+                                user.mbti = MBTI.valueOf((String) children.getValue());
+                                break;
+                        }
+                    } catch (Exception e) {
+                        listener.onSuccess(false);
+                    }
+                }
+                listener.onSuccess(true);
             }
-            Exception ex = task.getException();
-            if (ex instanceof FirebaseAuthInvalidUserException)
-                result.setValue(new LoginFormState(R.string.user_not_found, null));
-            else if (ex instanceof FirebaseAuthInvalidCredentialsException)
-                result.setValue(new LoginFormState(null, R.string.wrong_password));
-            else
-                result.setValue(new LoginFormState(false));
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
-        return result;
+    }
+
+    public Task<AuthResult> login(String email, String password) {
+        return auth.signInWithEmailAndPassword(email, password);
     }
 
     public void logout() {
@@ -52,38 +87,15 @@ public class LoginRepository {
         user = null;
     }
 
-    public MutableLiveData<LoginFormState> register(String email, String password,
-                                                    String bloodType, String constellation, String mbti) {
-        MutableLiveData<LoginFormState> result = new MutableLiveData<>();
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                addUserInfo(bloodType, constellation, mbti);
-                result.setValue(new LoginFormState(true));
-                return;
-            }
-            Exception ex = task.getException();
-            if (ex instanceof FirebaseAuthWeakPasswordException)
-                result.setValue(new LoginFormState(null, R.string.invalid_password_format));
-            else if (ex instanceof FirebaseAuthInvalidCredentialsException)
-                result.setValue(new LoginFormState(R.string.invalid_email_format, null));
-            else if (ex instanceof FirebaseAuthUserCollisionException)
-                result.setValue(new LoginFormState(R.string.user_already_exists, null));
-            else
-                result.setValue(new LoginFormState(false));
-        });
-        return result;
+    public Task<AuthResult> register(String email, String password) {
+        return auth.createUserWithEmailAndPassword(email, password);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public MutableLiveData<Boolean> checkUserCollision(String email) {
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
-        auth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task ->
-                result.setValue(!task.getResult().getSignInMethods().isEmpty()));
-        return result;
-    }
-
-    private void addUserInfo(String bloodType, String constellation, String mbti) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public void setUserInfo(String uid, String bloodType, String constellation, String mbti) {
+        DatabaseReference ref = db.getReference("/users/" + uid);
+        ref.child("BloodType").setValue(bloodType);
+        ref.child("Constellation").setValue(constellation);
+        ref.child("MBTI").setValue(mbti);
     }
 
 }

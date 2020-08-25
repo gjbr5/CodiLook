@@ -1,8 +1,10 @@
-package kr.ceo.codilook;
+package kr.ceo.codilook.ui.main;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import kr.ceo.codilook.R;
 
 public class LoadingActivity extends AppCompatActivity {
 
