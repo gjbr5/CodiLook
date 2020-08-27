@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 
 import kr.ceo.codilook.ui.appinfo.AppInfoActivity;
+import kr.ceo.codilook.ui.login.LoginActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.ui.register.MyInfoActivity;
 
@@ -36,8 +37,8 @@ public class BaseNavigationDrawerActivity extends AppCompatActivity {
                 intent.setClass(BaseNavigationDrawerActivity.this, AppInfoActivity.class);
                 break;
             case R.id.nav_logout:
-                finish();
-                return true;
+                intent.setClass(BaseNavigationDrawerActivity.this, LoginActivity.class);
+                break;
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);

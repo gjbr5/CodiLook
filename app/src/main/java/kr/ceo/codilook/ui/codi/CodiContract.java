@@ -10,6 +10,7 @@ public interface CodiContract {
     interface View {
         void showImage(Bitmap bitmap);
         void showDescription(String title, String description);
+        void showTitle(String title);
         void setPrevEnable(boolean enable);
         void setNextEnable(boolean enable);
     }

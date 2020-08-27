@@ -7,10 +7,17 @@
     android:orientation="vertical"
     tools:context=".ui.codi.CodiActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/codi_tv_codi_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:text=""
+        android:textSize="20dp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/codi_img_btn_prev"
@@ -26,8 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="382dp"
             android:layout_weight="2"
-            android:contentDescription="@string/desc_codi"
-            android:src="@drawable/picture5" />
+            android:contentDescription="@string/desc_codi" />
 
         <ImageButton
             android:id="@+id/codi_img_btn_next"
@@ -58,16 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/home" />
-
-    <EditText
-        android:layout_width="250dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="19dp"
-        android:autofillHints="description"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/score"
-        android:inputType="textMultiLine" />
 
     <TextView
         android:layout_width="wrap_content"

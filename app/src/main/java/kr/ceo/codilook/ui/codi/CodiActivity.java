@@ -2,9 +2,12 @@ package kr.ceo.codilook.ui.codi;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,9 +19,11 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
+import kr.ceo.codilook.CustomProgressBar;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
+import kr.ceo.codilook.ui.login.LoginActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class CodiActivity extends BaseNavigationDrawerActivity implements CodiContract.View {
@@ -30,6 +35,8 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     ImageButton imgBtnNext;//뒤로 가기
 
     RatingBar ratingBar;//코디 추천 별점
+
+    TextView tvCodiName;
 
     CodiContract.Presenter presenter;
 
@@ -59,7 +66,12 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
             finish();
         });
 
+        tvCodiName = findViewById(R.id.codi_tv_codi_name);
+
     }
+
+    @Override
+    public  void showTitle(String title){ tvCodiName.setText(title); }
 
     @Override
     public void showImage(Bitmap bitmap) {

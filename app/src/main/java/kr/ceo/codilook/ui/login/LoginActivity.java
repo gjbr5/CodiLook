@@ -2,7 +2,10 @@ package kr.ceo.codilook.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.ceo.codilook.CustomProgressBar;
 import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.LoginRepository;
@@ -22,6 +26,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private static final int REGISTER_REQ_CODE = 100;
 
     LoginContract.Presenter presenter;
+    CustomProgressBar CPB;
 
     EditText etEmail;
     EditText etPassword;
@@ -33,8 +38,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        CPB = new CustomProgressBar(this);
         presenter = new LoginPresenter(this,
-                LoginRepository.getInstance(), PreferenceRepository.getInstance(getApplication()));
+                LoginRepository.getInstance(), PreferenceRepository.getInstance(getApplication()), CPB);
         initView();
         presenter.autoLogin();
     }
@@ -75,6 +81,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void waitForLogin() {
         // TODO: Show Progress View
+        if(CPB.getWindow() != null) {
+            CPB.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            CPB.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            CPB.setCancelable(false);
+        }
+        CPB.show();
     }
 
     @Override

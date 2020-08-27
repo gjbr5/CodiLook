@@ -45,6 +45,7 @@ public class CodiPresenter implements CodiContract.Presenter {
                         storageRepository.getImage(ref, bitmap -> {
                             imageList.add(bitmap);
                             view.showImage(bitmap);
+                            view.showTitle(imageList.getCodi().name());
                         });
                     else
                         storageRepository.getImage(ref, imageList::add);
@@ -72,6 +73,7 @@ public class CodiPresenter implements CodiContract.Presenter {
         view.showImage(imgList.get(codiNum).get(imgNum));
         ImageList list = Objects.requireNonNull(imgList.get(codiNum));
         view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
+        view.showTitle(list.getCodi().name());
     }
 
     @Override
@@ -87,6 +89,7 @@ public class CodiPresenter implements CodiContract.Presenter {
         view.showImage(imgList.get(codiNum).get(imgNum));
         ImageList list = Objects.requireNonNull(imgList.get(codiNum));
         view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
+        view.showTitle(list.getCodi().name());
     }
 
     private static class ImageList {
