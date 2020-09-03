@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -13,29 +12,22 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.LoginRepository;
+import kr.ceo.codilook.model.UserRepository;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
-    RegisterContract.Presenter presenter;
-
-    EditText etEmail; // Email 입력창
-    EditText etPassword; // PW 입력창
-    EditText etPwConfirm; // PW 확인 입력창
-    Spinner spBloodType; // 혈액형 스피너
-    Spinner spConstellation; // 별자리 스피너
-    Spinner spMbti; // MBTI 스피너
-    Button btnMbtiLink; // MBTI검사 링크이동 버튼
-    Button btnRegister; // 회원가입 완료 버튼
+    private RegisterContract.Presenter presenter;
+    private EditText etEmail; // Email 입력창
+    private EditText etPassword; // PW 입력창
+    private EditText etPwConfirm; // PW 확인 입력창
+    private Spinner spBloodType; // 혈액형 스피너
+    private Spinner spConstellation; // 별자리 스피너
+    private Spinner spMbti; // MBTI 스피너
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        presenter = new RegisterPresenter(this, LoginRepository.getInstance());
-        initView();
-    }
-
-    private void initView() {
+        presenter = new RegisterPresenter(this, UserRepository.getInstance());
         etEmail = findViewById(R.id.register_et_email);
         etEmail.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) presenter.isEmailValid(((EditText) v).getText().toString());
@@ -56,32 +48,29 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         spConstellation = findViewById(R.id.register_sp_constellation);
         spMbti = findViewById(R.id.register_sp_mbti);
 
-        btnMbtiLink = findViewById(R.id.register_btn_mbti_link);
-        btnMbtiLink.setOnClickListener(view -> openLinkDialog());
+        // MBTI검사 링크이동 버튼
+        findViewById(R.id.register_btn_mbti_link).setOnClickListener(view -> openLinkDialog());
 
-        btnRegister = findViewById(R.id.register_btn_register);
-        btnRegister.setOnClickListener(v -> {
+        // 회원가입 완료 버튼
+        findViewById(R.id.register_btn_register).setOnClickListener(v -> {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
             String pwConfirm = etPwConfirm.getText().toString();
             String bloodType = spBloodType.getSelectedItem().toString();
             String constellation = spConstellation.getSelectedItem().toString();
             String mbti = spMbti.getSelectedItem().toString();
-
+            // TODO: Show Progress
             presenter.register(email, password, pwConfirm, bloodType, constellation, mbti);
         });
-
     }
 
     private void openLinkDialog() {
         // MBTI 검사 창으로 이동을 알리는 다이얼로그 창 띄우기
-        new AlertDialog.Builder(RegisterActivity.this,
-                android.R.style.Theme_DeviceDefault_Light_Dialog)
-                .setMessage(R.string.mbti_test)
+        new AlertDialog.Builder(RegisterActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog).setMessage(R.string.mbti_test)
                 .setPositiveButton(R.string.yes, (dialog, which) ->
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.16personalities.com/ko/"))))
                 .setNegativeButton(R.string.no, null)
-                .show();
+                .create().show();
     }
 
     @Override
@@ -101,12 +90,12 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
 
     @Override
     public void onRegisterComplete(boolean success) {
+        // TODO: Dismiss Progress
         if (success) {
-            Intent intent = new Intent();
-            intent.putExtra("email", etEmail.getText().toString());
-            intent.putExtra("password", etPassword.getText().toString());
-            setResult(Activity.RESULT_OK, intent);
+            setResult(Activity.RESULT_OK);
             finish();
+        } else {
+            setResult(Activity.RESULT_CANCELED);
         }
     }
 

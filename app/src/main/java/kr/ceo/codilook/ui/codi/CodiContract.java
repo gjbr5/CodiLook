@@ -13,9 +13,13 @@ public interface CodiContract {
         void showTitle(String title);
         void setPrevEnable(boolean enable);
         void setNextEnable(boolean enable);
+        void setDefaultRating(float rating);
+        void setRatingText(String ratingText);
     }
     interface Presenter {
         void prevImage();
         void nextImage();
+        void onRatingChanged(float rating);
+        void applyChanges();
     }
 }

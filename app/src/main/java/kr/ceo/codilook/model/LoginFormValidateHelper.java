@@ -4,7 +4,7 @@ import android.util.Patterns;
 
 import kr.ceo.codilook.R;
 
-public class LoginFormValidator {
+public class LoginFormValidateHelper {
     public static Integer validateEmail(String email) {
         Integer error = null;
         if (email == null || !email.contains("@"))

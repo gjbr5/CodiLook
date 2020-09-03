@@ -2,13 +2,9 @@ package kr.ceo.codilook.ui.codi;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -19,26 +15,22 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
-import kr.ceo.codilook.CustomProgressBar;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
-import kr.ceo.codilook.ui.login.LoginActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class CodiActivity extends BaseNavigationDrawerActivity implements CodiContract.View {
 
-    ImageView codi_img_GoHome;
+    private ImageButton imgBtnPrev;//앞으로 가기
+    private ImageView imgCodi;//코디 추천 이미지
+    private ImageButton imgBtnNext;//뒤로 가기
 
-    ImageButton imgBtnPrev;//앞으로 가기
-    ImageView imgCodi;//코디 추천 이미지
-    ImageButton imgBtnNext;//뒤로 가기
+    private RatingBar ratingCodiScore;//코디 추천 별점
 
-    RatingBar ratingBar;//코디 추천 별점
-
-    TextView tvCodiName;
-
-    CodiContract.Presenter presenter;
+    private TextView tvCodiName;
+    private TextView tvRating;
+    private CodiContract.Presenter presenter;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -58,7 +50,7 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
         imgBtnNext = findViewById(R.id.codi_img_btn_next);
         imgBtnNext.setOnClickListener(v -> presenter.nextImage());
 
-        codi_img_GoHome = findViewById(R.id.ly_codi_img_GoHome);
+        ImageView codi_img_GoHome = findViewById(R.id.ly_codi_img_GoHome);
 
         codi_img_GoHome.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -67,11 +59,34 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
         });
 
         tvCodiName = findViewById(R.id.codi_tv_codi_name);
+        ratingCodiScore = findViewById(R.id.codi_rating_codi_score);
+        ratingCodiScore.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> presenter.onRatingChanged(rating));
+        tvRating = findViewById(R.id.codi_tv_rating);
 
     }
 
     @Override
-    public  void showTitle(String title){ tvCodiName.setText(title); }
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.applyChanges();
+    }
+
+    @Override
+    public void setDefaultRating(float rating) {
+        ratingCodiScore.setRating(rating);
+    }
+
+    @Override
+    public void setRatingText(String ratingText) {
+        if (ratingText == null)
+            tvRating.setText(R.string.score);
+        tvRating.setText(ratingText);
+    }
+
+    @Override
+    public void showTitle(String title) {
+        tvCodiName.setText(title);
+    }
 
     @Override
     public void showImage(Bitmap bitmap) {
@@ -84,7 +99,7 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
         AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.CustomAlertDialog).setView(dialogView).create();
         ((TextView) dialogView.findViewById(R.id.description_tv_title)).setText(title);
         ((TextView) dialogView.findViewById(R.id.description_tv_description)).setText(description);
-        ((Button) dialogView.findViewById(R.id.description_btn_ok)).setOnClickListener(v -> alertDialog.dismiss());
+        dialogView.findViewById(R.id.description_btn_ok).setOnClickListener(v -> alertDialog.dismiss());
         alertDialog.show();
     }
 

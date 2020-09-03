@@ -17,19 +17,19 @@ import java.io.File;
 import kr.ceo.codilook.model.fuzzy.Codi;
 
 public class StorageRepository {
-    private static StorageRepository instance = null;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private Application app;
 
-    private StorageRepository(Application app) {
-        this.app = app;
+    private StorageRepository() {
     }
 
     public static StorageRepository getInstance(Application app) {
-        if (instance == null) {
-            instance = new StorageRepository(app);
-        }
-        return instance;
+        SingletonHolder.instance.init(app);
+        return SingletonHolder.instance;
+    }
+
+    private void init(Application app) {
+        this.app = app;
     }
 
     public void getImage(StorageReference ref, OnSuccessListener<Bitmap> onSuccessListener) {
@@ -45,8 +45,22 @@ public class StorageRepository {
         });
     }
 
-    public Task<ListResult> getList(Codi codi) {
+    public void getList(Codi codi, OnSuccessListener<ListResult> onSuccessListener) {
         StorageReference ref = storage.getReference(codi.name());
-        return ref.listAll();
+        ref.listAll().addOnSuccessListener(onSuccessListener);
+    }
+
+    public void getReference(OnSuccessListener<String> onSuccessListener) {
+        StorageReference ref = storage.getReference("/reference.txt");
+        ref.getBytes(10 * 1024 * 1024)
+                .addOnSuccessListener(bytes -> onSuccessListener.onSuccess(new String(bytes)));
+    }
+
+    public void getUpdateList(OnSuccessListener<String> onSuccessListener) {
+        Tasks.call(() -> "버전 1.0.0\r\n정식 출시").addOnSuccessListener(onSuccessListener);
+    }
+
+    private static class SingletonHolder {
+        private static final StorageRepository instance = new StorageRepository();
     }
 }

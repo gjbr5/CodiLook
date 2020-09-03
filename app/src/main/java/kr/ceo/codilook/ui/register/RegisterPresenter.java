@@ -5,35 +5,38 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.LoginFormValidator;
-import kr.ceo.codilook.model.LoginRepository;
+import kr.ceo.codilook.model.LoginFormValidateHelper;
+import kr.ceo.codilook.model.UserRepository;
+import kr.ceo.codilook.model.fuzzy.BloodType;
+import kr.ceo.codilook.model.fuzzy.Constellation;
+import kr.ceo.codilook.model.fuzzy.MBTI;
 
 public class RegisterPresenter implements RegisterContract.Presenter {
     RegisterContract.View view;
-    LoginRepository loginRepository;
+    UserRepository userRepository;
 
-    public RegisterPresenter(RegisterContract.View view, LoginRepository loginRepository) {
+    public RegisterPresenter(RegisterContract.View view, UserRepository userRepository) {
         this.view = view;
-        this.loginRepository = loginRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public boolean isEmailValid(String email) {
-        Integer error = LoginFormValidator.validateEmail(email);
+        Integer error = LoginFormValidateHelper.validateEmail(email);
         view.setEmailError(error);
         return error == null;
     }
 
     @Override
     public boolean isPasswordValid(String password) {
-        Integer error = LoginFormValidator.validatePassword(password);
+        Integer error = LoginFormValidateHelper.validatePassword(password);
         view.setPasswordError(error);
         return error == null;
     }
 
     @Override
     public boolean isPwConfirmValid(String password, String pwConfirm) {
-        Integer error = LoginFormValidator.validatePwConfirm(password, pwConfirm);
+        Integer error = LoginFormValidateHelper.validatePwConfirm(password, pwConfirm);
         view.setPwConfirmError(error);
         return error == null;
     }
@@ -53,26 +56,20 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         if (constellation.equals("--")) constellation = "";
         else constellation = constellation.substring(0, constellation.indexOf("("));
 
-        final String finalBloodType = bloodType;
-        final String finalConstellation = constellation;
-        final String finalMbti = mbti;
-        loginRepository.register(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String uid = task.getResult().getUser().getUid();
-                loginRepository.setUserInfo(uid, finalBloodType, finalConstellation, finalMbti);
-                view.onRegisterComplete(true);
-            } else {
-                Exception ex = task.getException();
-                if (ex instanceof FirebaseAuthWeakPasswordException)
-                    view.setPasswordError(R.string.invalid_password_format);
-                else if (ex instanceof FirebaseAuthInvalidCredentialsException)
-                    view.setEmailError(R.string.invalid_email_format);
-                else if (ex instanceof FirebaseAuthUserCollisionException)
-                    view.setEmailError(R.string.user_already_exists);
-                else
-                    view.showErrorMessage(R.string.unknown_error);
-                view.onRegisterComplete(false);
-            }
-        });
+        userRepository.register(email, password, BloodType.valueOf(bloodType),
+                Constellation.valueOf(constellation), MBTI.valueOf(mbti),
+                user -> view.onRegisterComplete(true),
+                e -> {
+                    if (e instanceof FirebaseAuthWeakPasswordException)
+                        view.setPasswordError(R.string.invalid_password_format);
+                    else if (e instanceof FirebaseAuthInvalidCredentialsException)
+                        view.setEmailError(R.string.invalid_email_format);
+                    else if (e instanceof FirebaseAuthUserCollisionException)
+                        view.setEmailError(R.string.user_already_exists);
+                    else
+                        view.showErrorMessage(R.string.unknown_error);
+                    view.onRegisterComplete(false);
+                }
+        );
     }
 }

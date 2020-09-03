@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,24 +14,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ceo.codilook.CustomProgressBar;
-import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.LoginRepository;
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.PreferenceRepository;
+import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.ui.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
 
     private static final int REGISTER_REQ_CODE = 100;
 
-    LoginContract.Presenter presenter;
-    CustomProgressBar CPB;
+    private LoginContract.Presenter presenter;
+    private CustomProgressBar CPB;
 
-    EditText etEmail;
-    EditText etPassword;
-    CheckBox chkAutoLogin;
-    Button btnLogin;
-    Button btnRegister;
+    private EditText etEmail;
+    private EditText etPassword;
+    private CheckBox chkAutoLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         setContentView(R.layout.activity_login);
         CPB = new CustomProgressBar(this);
         presenter = new LoginPresenter(this,
-                LoginRepository.getInstance(), PreferenceRepository.getInstance(getApplication()), CPB);
+                UserRepository.getInstance(), PreferenceRepository.getInstance(getApplication()), CPB);
         initView();
         presenter.autoLogin();
     }
@@ -58,12 +55,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         chkAutoLogin = findViewById(R.id.login_chk_auto_login);
 
-        btnLogin = findViewById(R.id.login_btn_login);
-        btnLogin.setOnClickListener(view -> presenter.login(
-                etEmail.getText().toString(), etPassword.getText().toString(), chkAutoLogin.isChecked()));
+        findViewById(R.id.login_btn_login).setOnClickListener(view ->
+                presenter.login(etEmail.getText().toString(),
+                        etPassword.getText().toString(), chkAutoLogin.isChecked()));
 
-        btnRegister = findViewById(R.id.login_btn_register);
-        btnRegister.setOnClickListener(view -> {
+        findViewById(R.id.login_btn_register).setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivityForResult(intent, REGISTER_REQ_CODE);
         });
@@ -72,16 +68,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REGISTER_REQ_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            etEmail.setText(data.getStringExtra("email"));
-            etPassword.setText(data.getStringExtra("password"));
+        if (requestCode == REGISTER_REQ_CODE && resultCode == Activity.RESULT_OK) {
+            onLoginComplete(true);
         }
     }
 
     @Override
     public void waitForLogin() {
         // TODO: Show Progress View
-        if(CPB.getWindow() != null) {
+        if (CPB.getWindow() != null) {
             CPB.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             CPB.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             CPB.setCancelable(false);

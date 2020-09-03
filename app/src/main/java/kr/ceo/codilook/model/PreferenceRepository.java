@@ -5,17 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PreferenceRepository {
-    private static PreferenceRepository instance;
     private Application app;
 
-    private PreferenceRepository(Application app) {
-        this.app = app;
+    private PreferenceRepository() {
     }
 
-    public synchronized static PreferenceRepository getInstance(Application app) {
-        if (instance == null)
-            instance = new PreferenceRepository(app);
-        return instance;
+    public static PreferenceRepository getInstance(Application app) {
+        SingletonHolder.instance.init(app);
+        return SingletonHolder.instance;
+    }
+
+    private void init(Application app) {
+        this.app = app;
     }
 
     public boolean getAutoLogin() {
@@ -28,5 +29,9 @@ public class PreferenceRepository {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("autoLogin", autoLogin);
         editor.apply();
+    }
+
+    private static class SingletonHolder {
+        private static final PreferenceRepository instance = new PreferenceRepository();
     }
 }

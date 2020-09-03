@@ -4,20 +4,16 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.LoginRepository;
 import kr.ceo.codilook.model.User;
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.fuzzy.Adjectivizable;
-import kr.ceo.codilook.ui.login.LoginActivity;
 
 public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyInfoContract.View {
 
@@ -42,13 +38,13 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
 
-        presenter = new MyInfoPresenter(this, LoginRepository.getInstance());
+        presenter = new MyInfoPresenter(this, UserRepository.getInstance());
         initView();
     }
 
     private void initView() {
         tvEmail = findViewById(R.id.my_info_tv_email);
-        tvEmail.setText(LoginRepository.getUser().getEmail());
+        tvEmail.setText(UserRepository.getUser().email);
 
         etPassword = findViewById(R.id.my_info_et_password);
         etNewPassword = findViewById(R.id.my_info_et_new_password);
@@ -73,20 +69,20 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
             //수정하기 버튼
         });
 
-        Adjectivizable[] adj = LoginRepository.getUser().getAdjectivizables();
+        Adjectivizable[] adj = UserRepository.getUser().getAdjectivizables();
         String blood = adj[0] + "형";
-        for(int i = 1; i < 5; i++)
-            if(blood.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
+        for (int i = 1; i < 5; i++)
+            if (blood.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
 
         String constellation = adj[1].toString();
-        for(int i = 1; i < 13; i++) {
+        for (int i = 1; i < 13; i++) {
             String str = spConstellation.getItemAtPosition(i).toString();
-            if (constellation.equals(str.substring(0,str.indexOf("("))))//별자리 뒤의 날짜 파싱
+            if (constellation.equals(str.substring(0, str.indexOf("("))))//별자리 뒤의 날짜 파싱
                 spConstellation.setSelection(i);
         }
         String mbti = adj[2].toString();
-        for(int i = 1; i < 17; i++)
-            if(mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
+        for (int i = 1; i < 17; i++)
+            if (mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
 
 
     }

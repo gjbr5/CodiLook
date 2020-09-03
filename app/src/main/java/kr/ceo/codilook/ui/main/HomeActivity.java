@@ -19,7 +19,8 @@ import java.util.TimerTask;
 
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.LoginRepository;
+import kr.ceo.codilook.model.User;
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 import kr.ceo.codilook.model.fuzzy.Fuzzy;
@@ -40,9 +41,9 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
         storageRepository = StorageRepository.getInstance(getApplication());
         btnRecommend = findViewById(R.id.home_btn_recommend);
         btnRecommend.setOnClickListener(view -> {
-            // For test
             Fuzzy fuzzy = new Fuzzy(getResources().openRawResource(R.raw.membership));
-            startCodiActivity(fuzzy.getCodiList(LoginRepository.getUser().getAdjectivizables()));
+            User user = UserRepository.getUser();
+            startCodiActivity(fuzzy.getCodiList(user.getAdjectivizables(), user.score));
         });
 
         imgCodi = findViewById(R.id.home_img_codi);
@@ -55,20 +56,13 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                handler.postDelayed(new Runnable(){
-                    public void run(){
-                        //이미지 한장 짜리 코드
-                        Random r = new Random();
-                        int num = r.nextInt(codi.values().length);
-                        randomImg(num);
-                    }
+                handler.postDelayed(() -> {
+                    //이미지 한장 짜리 코드
+                    Random r = new Random();
+                    int num = r.nextInt(Codi.values().length);
+                    randomImg(num);
                 }, 2000);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(getApplicationContext()).load(R.drawable.random_codi_img).into(gifImg);
-                    }
-                });
+                handler.post(() -> Glide.with(getApplicationContext()).load(R.drawable.random_codi_img).into(gifImg));
 
             }
         }, 0, 4000); //시작지연시간 0, 주기 3초
@@ -93,14 +87,12 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
     }
 
     private void randomImg(int num){
-        storageRepository.getList(getCodi(num)).addOnSuccessListener(listResult -> {
+        storageRepository.getList(getCodi(num), listResult -> {
             List<StorageReference> listReference = listResult.getItems();
             Random r = new Random();
             int random = r.nextInt(listReference.size());
             StorageReference ref = listReference.get(random);
-            storageRepository.getImage(ref, bitmap -> {
-                imgCodi.setImageBitmap(bitmap);
-            });
+            storageRepository.getImage(ref, bitmap -> imgCodi.setImageBitmap(bitmap));
         });
     }
 

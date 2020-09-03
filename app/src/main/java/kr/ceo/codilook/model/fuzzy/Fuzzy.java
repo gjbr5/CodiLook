@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 
 public class Fuzzy {
 
-    private static Codi[] codis = Codi.values();
-
     private Map<Adjective, Map<Codi, Integer>> memberships;
 
     public Fuzzy(InputStream inputStream) {
@@ -34,7 +32,7 @@ public class Fuzzy {
                 memberships.put(Adjective.valueOf(values[0]), membership);
             }
         } catch (IOException ex) {
-            Log.e("ReadingCSV", ex.toString());
+            Log.e("Fuzzy.Fuzzy", ex.toString());
         }
     }
 
@@ -50,16 +48,47 @@ public class Fuzzy {
         }
     }
 
-    public ArrayList<Codi> getCodiList(Adjectivizable[] adjectivizables) {
+    public ArrayList<Codi> getCodiList(Adjectivizable[] adjectivizables, Map<Codi, Integer> scores) {
         Map<Codi, Integer> total = new TreeMap<>();
-
         for (Adjectivizable adjectivizable : adjectivizables) {
             addResult(total, adjectivizable);
+        }
+        for (Map.Entry<Codi, Integer> score : scores.entrySet()) {
+            @SuppressWarnings("ConstantConditions")
+            Integer newVal = (int) (total.get(score.getKey()) * starScoreToWeight(score.getValue()));
+            total.put(score.getKey(), newVal);
         }
 
         return total.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private double starScoreToWeight(int score) {
+        switch (score) {
+            case -5:
+                return 0.5;
+            case -4:
+                return 0.6;
+            case -3:
+                return 0.7;
+            case -2:
+                return 0.8;
+            case -1:
+                return 0.9;
+            case 1:
+                return 1.1;
+            case 2:
+                return 1.2;
+            case 3:
+                return 1.3;
+            case 4:
+                return 1.4;
+            case 5:
+                return 1.5;
+            default:
+                return 1.0;
+        }
     }
 }

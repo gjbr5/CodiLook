@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
 
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 
@@ -33,7 +34,7 @@ public class CodiPresenter implements CodiContract.Presenter {
         ImageList imageList = new ImageList(codi);
         imgList.put(idx, imageList); // Init imgList
 
-        storageRepository.getList(codi).addOnSuccessListener(listResult -> {
+        storageRepository.getList(codi, listResult -> {
             Random random = new Random();
             List<StorageReference> listReference = listResult.getItems();
             while (listReference.size() > 3)
@@ -70,9 +71,10 @@ public class CodiPresenter implements CodiContract.Presenter {
         if (codiNum == 0 && imgNum == 0) {
             view.setPrevEnable(false);
         }
-        view.showImage(imgList.get(codiNum).get(imgNum));
         ImageList list = Objects.requireNonNull(imgList.get(codiNum));
-        view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
+        Bitmap image = list.get(imgNum);
+        view.showImage(image);
+        view.showDescription(list.getCodi().name(), image.toString());
         view.showTitle(list.getCodi().name());
     }
 
@@ -86,10 +88,48 @@ public class CodiPresenter implements CodiContract.Presenter {
         view.setPrevEnable(true);
         if (codiNum == 2 && imgNum == 2)
             view.setNextEnable(false);
-        view.showImage(imgList.get(codiNum).get(imgNum));
         ImageList list = Objects.requireNonNull(imgList.get(codiNum));
+        view.showImage(imgList.get(codiNum).get(imgNum));
         view.showDescription(list.getCodi().name(), list.get(imgNum).toString());
         view.showTitle(list.getCodi().name());
+    }
+
+    @Override
+    public void onRatingChanged(float rating) {
+        view.setRatingText("Score: " + rating);
+        int integerRating = floatRatingToIntegerRating(rating);
+        UserRepository.getUser().addScore(imgList.get(codiNum).getCodi(), integerRating);
+
+    }
+
+    @Override
+    public void applyChanges() {
+        UserRepository.getInstance().applyScore();
+    }
+
+    private int floatRatingToIntegerRating(float rating) {
+        if (rating <= 0.25f)
+            return -5;
+        else if (rating <= 0.75f)
+            return -4;
+        else if (rating <= 1.25f)
+            return -3;
+        else if (rating <= 1.75f)
+            return -2;
+        else if (rating <= 2.25f)
+            return -1;
+        else if (rating <= 2.75f)
+            return 0;
+        else if (rating <= 3.25f)
+            return 1;
+        else if (rating <= 3.75f)
+            return 2;
+        else if (rating <= 4.25f)
+            return 3;
+        else if (rating <= 4.75f)
+            return 4;
+        else
+            return 5;
     }
 
     private static class ImageList {

@@ -6,32 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.appinfo.AppInfoActivity">
 
-    <ImageView
-        android:id="@+id/app_info_img_title"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/title" />
-
     <TextView
         android:id="@+id/app_info_tv_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="2020-2021.Koreatech C.E.O.Team"
+        android:layout_marginTop="64dp"
+        android:text="@string/copyright"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_info_img_title" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/app_info_tv_lbl_current_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="@string/current_version"
+        android:text="@string/lbl_current_version"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
@@ -42,7 +32,7 @@
         android:id="@+id/app_info_tv_current_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="v1.0.0"
+        android:text="@string/current_version"
         android:textColor="#FF9800"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@id/app_info_tv_lbl_current_version"
@@ -55,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/latest_version"
+        android:text="@string/lbl_latest_version"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.3"
@@ -66,7 +56,6 @@
         android:id="@+id/app_info_tv_latest_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-"
         android:textColor="#FF9800"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@id/app_info_tv_lbl_latest_version"
@@ -94,21 +83,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="169dp"
-        android:layout_marginEnd="2dp"
-        android:gravity="bottom"
-        android:text="@string/copyright"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/app_info_tv_current_version"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
