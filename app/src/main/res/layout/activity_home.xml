@@ -17,8 +17,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:contentDescription="@string/prev"
-            android:src="@android:drawable/ic_media_rew" />
+            android:contentDescription="@string/prev" />
 
         <ImageView
             android:id="@+id/home_img_codi"
@@ -34,8 +33,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:contentDescription="@string/next"
-            android:src="@android:drawable/ic_media_ff" />
+            android:contentDescription="@string/next" />
     </LinearLayout>
 
     <Button

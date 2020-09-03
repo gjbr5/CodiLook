@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.appinfo.AppInfoActivity">
 
-    <ImageView
-        android:id="@+id/my_info_img_title"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/title" />
-
     <TextView
         android:id="@+id/my_info_tv_title"
         android:layout_width="wrap_content"
@@ -26,7 +16,7 @@
         android:textColor="#FF9800"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_info_img_title" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
         android:id="@+id/my_info_tl_form"
@@ -47,19 +37,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/my_info_et_email"
+                android:labelFor="@id/my_info_tv_email"
                 android:text="@string/prompt_email"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
-            <EditText
-                android:id="@+id/my_info_et_email"
+            <TextView
+                android:id="@+id/my_info_tv_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:autofillHints="email"
-                android:inputType="textEmailAddress"
                 android:textSize="16sp" />
 
         </TableRow>
@@ -76,7 +64,7 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:labelFor="@id/my_info_et_password"
-                android:text="@string/prompt_password"
+                android:text="현재 PW"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
@@ -86,6 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
+                android:hint="PW 변경을 원하시면 입력하시오."
                 android:autofillHints="password"
                 android:inputType="textPassword"
                 android:textSize="16sp" />
@@ -103,17 +92,47 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/my_info_et_pw_confirm"
-                android:text="@string/prompt_password_confirm"
+                android:labelFor="@id/my_info_et_new_password"
+                android:text="새 PW"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
             <EditText
-                android:id="@+id/my_info_et_pw_confirm"
+                android:id="@+id/my_info_et_new_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
+                android:hint="PW 변경을 원하시면 입력하시오."
+                android:autofillHints="password"
+                android:inputType="textPassword"
+                android:textSize="16sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:labelFor="@id/my_info_et_new_pw_confirm"
+                android:text="새 PW 확인"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:typeface="serif" />
+
+            <EditText
+                android:id="@+id/my_info_et_new_pw_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:hint="PW 변경을 원하시면 입력하시오."
                 android:autofillHints="password"
                 android:inputType="textPassword"
                 android:textSize="16sp" />

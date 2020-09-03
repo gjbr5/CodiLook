@@ -1,9 +1,14 @@
 package kr.ceo.codilook.ui.register;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 
@@ -19,9 +24,11 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
     MyInfoContract.Presenter presenter;
     User user;
 
-    EditText etEmail;
+    TextView tvEmail;
+
     EditText etPassword;
-    EditText etPwConfirm;
+    EditText etNewPassword;
+    EditText etNewPwConfirm;
 
     Spinner spBloodType;
     Spinner spConstellation;
@@ -35,21 +42,73 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
 
-        etEmail = findViewById(R.id.my_info_et_email);
+        presenter = new MyInfoPresenter(this, LoginRepository.getInstance());
+        initView();
+    }
+
+    private void initView() {
+        tvEmail = findViewById(R.id.my_info_tv_email);
+        tvEmail.setText(LoginRepository.getUser().getEmail());
+
         etPassword = findViewById(R.id.my_info_et_password);
-        etPwConfirm = findViewById(R.id.my_info_et_pw_confirm);
+        etNewPassword = findViewById(R.id.my_info_et_new_password);
+        etNewPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) presenter.isPasswordValid(((EditText) v).getText().toString());
+        });
+        etNewPwConfirm = findViewById(R.id.my_info_et_new_pw_confirm);
+        etNewPwConfirm.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus)
+                presenter.isPwConfirmValid(etPassword.getText().toString(), ((EditText) v).getText().toString());
+        });
 
         spBloodType = findViewById(R.id.my_info_sp_blood_type);
         spConstellation = findViewById(R.id.my_info_sp_constellation);
         spMbti = findViewById(R.id.my_info_sp_mbti);
 
         btnMbtiLink = findViewById(R.id.my_info_btn_mbti_link);
-        btnConfirm = findViewById(R.id.my_info_btn_confirm);
+        btnMbtiLink.setOnClickListener(view -> openLinkDialog());
 
-//        Adjectivizable[] adj = LoginRepository.getUser().getAdjectivizables();
-//        for(int i = 0; i < 4; i++){
-//            if(adj[0] == spBloodType.getItemAtPosition(i))
-//
-//        }
+        btnConfirm = findViewById(R.id.my_info_btn_confirm);
+        btnConfirm.setOnClickListener(view -> {
+            //수정하기 버튼
+        });
+
+        Adjectivizable[] adj = LoginRepository.getUser().getAdjectivizables();
+        String blood = adj[0] + "형";
+        for(int i = 1; i < 5; i++)
+            if(blood.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
+
+        String constellation = adj[1].toString();
+        for(int i = 1; i < 13; i++) {
+            String str = spConstellation.getItemAtPosition(i).toString();
+            if (constellation.equals(str.substring(0,str.indexOf("("))))//별자리 뒤의 날짜 파싱
+                spConstellation.setSelection(i);
+        }
+        String mbti = adj[2].toString();
+        for(int i = 1; i < 17; i++)
+            if(mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
+
+
+    }
+
+    private void openLinkDialog() {
+        // MBTI 검사 창으로 이동을 알리는 다이얼로그 창 띄우기
+        new AlertDialog.Builder(MyInfoActivity.this,
+                android.R.style.Theme_DeviceDefault_Light_Dialog)
+                .setMessage(R.string.mbti_test)
+                .setPositiveButton(R.string.yes, (dialog, which) ->
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.16personalities.com/ko/"))))
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    @Override
+    public void setPasswordError(Integer passwordError) {
+        etNewPassword.setError(passwordError == null ? null : getString(passwordError));
+    }
+
+    @Override
+    public void setPwConfirmError(Integer pwConfirmError) {
+        etNewPwConfirm.setError(pwConfirmError == null ? null : getString(pwConfirmError));
     }
 }
