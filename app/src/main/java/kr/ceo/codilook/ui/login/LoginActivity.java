@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ceo.codilook.CustomProgressBar;
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.PreferenceRepository;
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.ui.register.RegisterActivity;
 
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private static final int REGISTER_REQ_CODE = 100;
 
     private LoginContract.Presenter presenter;
-    private CustomProgressBar CPB;
+    private CustomProgressBar progressBar;
 
     private EditText etEmail;
     private EditText etPassword;
@@ -35,14 +36,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        CPB = new CustomProgressBar(this);
         presenter = new LoginPresenter(this,
-                UserRepository.getInstance(), PreferenceRepository.getInstance(getApplication()), CPB);
+                UserRepository.getInstance(), PreferenceRepository.getInstance(getApplication()));
         initView();
-        presenter.autoLogin();
+        if (getIntent().getBooleanExtra("logout", false))
+            presenter.logout();
+        else
+            presenter.autoLogin();
     }
 
+
     private void initView() {
+        progressBar = new CustomProgressBar(this);
+
         etEmail = findViewById(R.id.login_et_email);
         etEmail.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) presenter.isEmailValid(((EditText) v).getText().toString());
@@ -75,13 +81,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void waitForLogin() {
-        // TODO: Show Progress View
-        if (CPB.getWindow() != null) {
-            CPB.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            CPB.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            CPB.setCancelable(false);
+        Window window = progressBar.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            progressBar.setCancelable(false);
         }
-        CPB.show();
+        setProgressMessage(R.string.progress_login);
+        progressBar.show();
     }
 
     @Override
@@ -96,7 +103,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void onLoginComplete(boolean success) {
-        // TODO: Hide Progress View
+        if (progressBar.isShowing())
+            progressBar.dismiss();
         if (success) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
@@ -108,5 +116,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void showErrorMessage(Integer message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setProgressMessage(Integer message) {
+        progressBar.changeTitle(message);
     }
 }

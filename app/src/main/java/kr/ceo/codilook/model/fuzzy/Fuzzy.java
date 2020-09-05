@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import kr.ceo.codilook.model.User;
+
 public class Fuzzy {
 
     private Map<Adjective, Map<Codi, Integer>> memberships;
@@ -48,11 +50,11 @@ public class Fuzzy {
         }
     }
 
-    public ArrayList<Codi> getCodiList(Adjectivizable[] adjectivizables, Map<Codi, Integer> scores) {
+    public ArrayList<Codi> getCodiList(User.UserData userData, Map<Codi, Integer> scores) {
         Map<Codi, Integer> total = new TreeMap<>();
-        for (Adjectivizable adjectivizable : adjectivizables) {
-            addResult(total, adjectivizable);
-        }
+        addResult(total, userData.bloodType);
+        addResult(total, userData.constellation);
+        addResult(total, userData.mbti);
         for (Map.Entry<Codi, Integer> score : scores.entrySet()) {
             @SuppressWarnings("ConstantConditions")
             Integer newVal = (int) (total.get(score.getKey()) * starScoreToWeight(score.getValue()));

@@ -13,12 +13,10 @@ import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
-import kr.ceo.codilook.model.fuzzy.Adjectivizable;
 
 public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyInfoContract.View {
 
     MyInfoContract.Presenter presenter;
-    User user;
 
     TextView tvEmail;
 
@@ -40,16 +38,16 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
 
         presenter = new MyInfoPresenter(this, UserRepository.getInstance());
         initView();
+        presenter.init();
     }
 
     private void initView() {
         tvEmail = findViewById(R.id.my_info_tv_email);
-        tvEmail.setText(UserRepository.getUser().email);
-
         etPassword = findViewById(R.id.my_info_et_password);
         etNewPassword = findViewById(R.id.my_info_et_new_password);
         etNewPassword.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) presenter.isPasswordValid(((EditText) v).getText().toString());
+            if (!hasFocus)
+                presenter.isPasswordValid(((EditText) v).getText().toString());
         });
         etNewPwConfirm = findViewById(R.id.my_info_et_new_pw_confirm);
         etNewPwConfirm.setOnFocusChangeListener((v, hasFocus) -> {
@@ -68,23 +66,6 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         btnConfirm.setOnClickListener(view -> {
             //수정하기 버튼
         });
-
-        Adjectivizable[] adj = UserRepository.getUser().getAdjectivizables();
-        String blood = adj[0] + "형";
-        for (int i = 1; i < 5; i++)
-            if (blood.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
-
-        String constellation = adj[1].toString();
-        for (int i = 1; i < 13; i++) {
-            String str = spConstellation.getItemAtPosition(i).toString();
-            if (constellation.equals(str.substring(0, str.indexOf("("))))//별자리 뒤의 날짜 파싱
-                spConstellation.setSelection(i);
-        }
-        String mbti = adj[2].toString();
-        for (int i = 1; i < 17; i++)
-            if (mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
-
-
     }
 
     private void openLinkDialog() {
@@ -106,5 +87,20 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
     @Override
     public void setPwConfirmError(Integer pwConfirmError) {
         etNewPwConfirm.setError(pwConfirmError == null ? null : getString(pwConfirmError));
+    }
+
+    @Override
+    public void setDefaultData(String email, String bloodType, String constellation, String mbti) {
+        tvEmail.setText(email);
+        for (int i = 1; i < 5; i++)
+            if (bloodType.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
+
+        for (int i = 1; i < 13; i++) {
+            String str = spConstellation.getItemAtPosition(i).toString();
+            if (constellation.equals(str.substring(0, str.indexOf("("))))//별자리 뒤의 날짜 파싱
+                spConstellation.setSelection(i);
+        }
+        for (int i = 1; i < 17; i++)
+            if (mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
     }
 }

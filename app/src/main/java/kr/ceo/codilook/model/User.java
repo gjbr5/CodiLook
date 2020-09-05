@@ -1,8 +1,12 @@
 package kr.ceo.codilook.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 import kr.ceo.codilook.model.fuzzy.Adjectivizable;
@@ -12,9 +16,7 @@ import kr.ceo.codilook.model.fuzzy.Constellation;
 import kr.ceo.codilook.model.fuzzy.MBTI;
 
 public class User {
-    public BloodType bloodType;
-    public Constellation constellation;
-    public MBTI mbti;
+    public UserData userData;
     public String uid;
     public String email;
     public Map<Codi, Integer> score;
@@ -30,17 +32,23 @@ public class User {
     public User(String uid, String email, BloodType bloodType, Constellation constellation, MBTI mbti) {
         this.uid = uid;
         this.email = email;
-        this.bloodType = bloodType;
-        this.constellation = constellation;
-        this.mbti = mbti;
+        this.userData = new UserData(bloodType, constellation, mbti);
         this.score = new TreeMap<>();
-    }
-
-    public Adjectivizable[] getAdjectivizables() {
-        return new Adjectivizable[]{bloodType, constellation, mbti};
     }
 
     public void addScore(Codi codi, int value) {
         score.put(codi, value);
+    }
+
+    public static class UserData {
+        public BloodType bloodType;
+        public Constellation constellation;
+        public MBTI mbti;
+
+        public UserData(BloodType bloodType, Constellation constellation, MBTI mbti) {
+            this.bloodType = bloodType;
+            this.constellation = constellation;
+            this.mbti = mbti;
+        }
     }
 }

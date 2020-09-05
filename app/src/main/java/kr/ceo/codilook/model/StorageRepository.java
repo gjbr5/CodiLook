@@ -4,9 +4,16 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -18,6 +25,7 @@ import kr.ceo.codilook.model.fuzzy.Codi;
 
 public class StorageRepository {
     private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private Application app;
 
     private StorageRepository() {
@@ -45,7 +53,23 @@ public class StorageRepository {
         });
     }
 
-    public void getList(Codi codi, OnSuccessListener<ListResult> onSuccessListener) {
+
+    public void getCodiDescription(Codi codi, int number, OnSuccessListener<DataSnapshot> onSuccessListener) {
+        DatabaseReference dbRef = db.getReference("LookDescription").child(codi.name()).child(String.valueOf(number));
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                onSuccessListener.onSuccess(snapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getCodiList(Codi codi, OnSuccessListener<ListResult> onSuccessListener) {
         StorageReference ref = storage.getReference(codi.name());
         ref.listAll().addOnSuccessListener(onSuccessListener);
     }

@@ -1,6 +1,7 @@
 package kr.ceo.codilook.ui.register;
 
 import kr.ceo.codilook.model.LoginFormValidateHelper;
+import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
 
 public class MyInfoPresenter implements MyInfoContract.Presenter {
@@ -10,6 +11,16 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
     public MyInfoPresenter(MyInfoContract.View view, UserRepository loginRepository) {
         this.view = view;
         this.userRepository = loginRepository;
+    }
+
+    @Override
+    public void init() {
+        String email = userRepository.getUser().email;
+        User.UserData data = userRepository.getUser().userData;
+        String blood = data.bloodType + "형";
+        String constellation = data.constellation.toString();
+        String mbti = data.mbti.toString();
+        view.setDefaultData(email, blood, constellation, mbti);
     }
 
     @Override

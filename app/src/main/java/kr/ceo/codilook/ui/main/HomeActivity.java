@@ -3,9 +3,9 @@ package kr.ceo.codilook.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
@@ -42,8 +42,8 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
         btnRecommend = findViewById(R.id.home_btn_recommend);
         btnRecommend.setOnClickListener(view -> {
             Fuzzy fuzzy = new Fuzzy(getResources().openRawResource(R.raw.membership));
-            User user = UserRepository.getUser();
-            startCodiActivity(fuzzy.getCodiList(user.getAdjectivizables(), user.score));
+            User user = UserRepository.getInstance().getUser();
+            startCodiActivity(fuzzy.getCodiList(user.userData, user.score));
         });
 
         imgCodi = findViewById(R.id.home_img_codi);
@@ -70,6 +70,7 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
     }
 
     private void startCodiActivity(ArrayList<Codi> codiList) {
+        Log.d("HomeActivity.startCodiActivity", codiList.toString());
         Intent intent = new Intent(HomeActivity.this, CodiActivity.class);
         intent.putExtra("Codi", codiList);
         startActivity(intent);
@@ -87,7 +88,7 @@ public class HomeActivity extends BaseNavigationDrawerActivity {
     }
 
     private void randomImg(int num){
-        storageRepository.getList(getCodi(num), listResult -> {
+        storageRepository.getCodiList(getCodi(num), listResult -> {
             List<StorageReference> listReference = listResult.getItems();
             Random r = new Random();
             int random = r.nextInt(listReference.size());

@@ -43,29 +43,32 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
     @Override
     public void register(String email, String password, String pwConfirm,
-                         String bloodType, String constellation, String mbti) {
+                         String strBloodType, String strConstellation, String strMbti) {
         if (!isEmailValid(email)) return;
         if (!isPasswordValid(password)) return;
         if (!isPwConfirmValid(password, pwConfirm)) return;
 
-        if (bloodType.equals("--")) bloodType = "";
-        else bloodType = bloodType.replace("형", "");
+        BloodType bloodType = null;
+        if (!strBloodType.equals("--"))
+            bloodType = BloodType.valueOf(strBloodType.replace("형", ""));
 
-        if (mbti.equals("--")) mbti = "";
+        MBTI mbti = null;
+        if (!strMbti.equals("--"))
+            mbti = MBTI.valueOf(strMbti);
 
-        if (constellation.equals("--")) constellation = "";
-        else constellation = constellation.substring(0, constellation.indexOf("("));
+        Constellation constellation = null;
+        if (!strConstellation.equals("--"))
+            constellation = Constellation.valueOf(strConstellation.substring(0, strConstellation.indexOf("(")));
 
-        userRepository.register(email, password, BloodType.valueOf(bloodType),
-                Constellation.valueOf(constellation), MBTI.valueOf(mbti),
+        userRepository.register(email, password, bloodType, constellation, mbti,
                 user -> view.onRegisterComplete(true),
                 e -> {
-                    if (e instanceof FirebaseAuthWeakPasswordException)
+                    if (e instanceof FirebaseAuthUserCollisionException)
+                        view.setEmailError(R.string.user_already_exists);
+                    else if (e instanceof FirebaseAuthWeakPasswordException)
                         view.setPasswordError(R.string.invalid_password_format);
                     else if (e instanceof FirebaseAuthInvalidCredentialsException)
                         view.setEmailError(R.string.invalid_email_format);
-                    else if (e instanceof FirebaseAuthUserCollisionException)
-                        view.setEmailError(R.string.user_already_exists);
                     else
                         view.showErrorMessage(R.string.unknown_error);
                     view.onRegisterComplete(false);

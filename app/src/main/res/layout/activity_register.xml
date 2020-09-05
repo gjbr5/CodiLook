@@ -8,7 +8,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:src="@drawable/title" />
 
     <TextView
@@ -193,8 +193,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="@string/link_mbti"
-                android:textSize="14sp" />
+                android:text="@string/link_mbti" />
         </TableRow>
 
     </TableLayout>
@@ -208,13 +207,5 @@
         android:layout_marginEnd="30dp"
         android:text="@string/register" />
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:gravity="bottom"
-        android:text="@string/copyright" />
 
 </LinearLayout>

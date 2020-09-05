@@ -46,13 +46,5 @@
         android:textColor="#E91E63"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:gravity="bottom"
-        android:text="@string/copyright" />
-
 </LinearLayout>
 

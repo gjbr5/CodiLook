@@ -240,12 +240,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_info_tl_form" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/copyright"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

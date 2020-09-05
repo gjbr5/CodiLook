@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.StorageRepository;
+import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
@@ -38,7 +39,9 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_codi);
 
-        presenter = new CodiPresenter(this, StorageRepository.getInstance(getApplication()),
+        presenter = new CodiPresenter(this,
+                StorageRepository.getInstance(getApplication()),
+                UserRepository.getInstance(),
                 (ArrayList<Codi>) getIntent().getSerializableExtra("Codi"));
 
         imgBtnPrev = findViewById(R.id.codi_img_btn_prev);
@@ -46,6 +49,7 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
         imgBtnPrev.setOnClickListener(v -> presenter.prevImage());
 
         imgCodi = findViewById(R.id.codi_img_codi);
+        imgCodi.setOnClickListener(v -> presenter.onImageClicked());
 
         imgBtnNext = findViewById(R.id.codi_img_btn_next);
         imgBtnNext.setOnClickListener(v -> presenter.nextImage());
@@ -72,11 +76,6 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     }
 
     @Override
-    public void setDefaultRating(float rating) {
-        ratingCodiScore.setRating(rating);
-    }
-
-    @Override
     public void setRatingText(String ratingText) {
         if (ratingText == null)
             tvRating.setText(R.string.score);
@@ -89,8 +88,10 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     }
 
     @Override
-    public void showImage(Bitmap bitmap) {
+    public void showImage(Bitmap bitmap, Float score) {
         imgCodi.setImageBitmap(bitmap);
+        if (score != null)
+            ratingCodiScore.setRating(score);
     }
 
     @Override

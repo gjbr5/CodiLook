@@ -41,4 +41,6 @@
     <string name="whats_new">업데이트 내역</string>
     <string name="my_info">내 정보</string>
     <string name="edit_confirm">수정하기</string>
+    <string name="progress_login">로그인 중…</string>
+    <string name="progress_getting_info">사용자 정보 가져오는 중…</string>
 </resources>

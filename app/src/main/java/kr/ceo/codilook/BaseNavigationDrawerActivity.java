@@ -37,6 +37,7 @@ public class BaseNavigationDrawerActivity extends AppCompatActivity {
                 intent.setClass(BaseNavigationDrawerActivity.this, AppInfoActivity.class);
                 break;
             case R.id.nav_logout:
+                intent.putExtra("logout", true);
                 intent.setClass(BaseNavigationDrawerActivity.this, LoginActivity.class);
                 break;
         }

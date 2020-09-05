@@ -12,10 +12,14 @@ public interface LoginContract {
         void onLoginComplete(boolean success);
 
         void showErrorMessage(Integer message);
+
+        void setProgressMessage(Integer message);
     }
 
     interface Presenter {
         void login(String email, String password, boolean autoLogin);
+
+        void logout();
 
         boolean isEmailValid(String email);
 
