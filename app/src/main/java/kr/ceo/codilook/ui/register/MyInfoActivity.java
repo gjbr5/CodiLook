@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
+import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyInfoContract.View {
 
@@ -65,6 +67,7 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         btnConfirm = findViewById(R.id.my_info_btn_confirm);
         btnConfirm.setOnClickListener(view -> {
             //수정하기 버튼
+            modify();
         });
     }
 
@@ -102,5 +105,29 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         }
         for (int i = 1; i < 17; i++)
             if (mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
+    }
+
+    public void modify(){
+        String uid = UserRepository.getInstance().getUser().uid;
+        String bloodType = spBloodType.getSelectedItem().toString();
+        String constellation = spConstellation.getSelectedItem().toString();
+        String mbti = spMbti.getSelectedItem().toString();
+
+        if(etPassword.getText().toString().equals("") &&//비번은 안바꿈 사용자 특성만 바꿈
+                etNewPassword.getText().toString().equals("") &&
+                etNewPwConfirm.getText().toString().equals("")){
+            presenter.characteristic(uid, bloodType, constellation, mbti);
+        }
+        else{//비번도 바꿈
+            presenter.reauth(UserRepository.getInstance().getUser().email, etPassword.getText().toString(),
+                    etNewPassword.getText().toString(), etNewPwConfirm.getText().toString());
+        }
+    }
+
+    public void goHome(){
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        startActivity(intent);
+        finish();
+        Toast.makeText(getApplicationContext(), "회원 정보 수정 완료", Toast.LENGTH_SHORT).show();
     }
 }
