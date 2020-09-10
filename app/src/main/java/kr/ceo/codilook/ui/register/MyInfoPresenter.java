@@ -1,5 +1,7 @@
 package kr.ceo.codilook.ui.register;
 
+import android.widget.Toast;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,7 +77,7 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
     }
 
     @Override
-    public void reauth(String email, String password, String newPw, String newConfPw){
+    public void pwReauth(String email, String password, String newPw, String newConfPw){
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         System.out.println("firebaseUser : " + firebaseUser);
@@ -93,6 +95,20 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
                 }
             }else if(task.getException() != null){
                 System.out.println("로그인 실패");
+            }
+        });
+    }
+
+    @Override
+    public void quitReauth(String email, String password){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                FirebaseAuth.getInstance().getCurrentUser().delete();
+                view.goLogin();
+            }else if(task.getException() != null){
+                System.out.println("인증 실패");
             }
         });
     }

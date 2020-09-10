@@ -10,10 +10,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
+import kr.ceo.codilook.ui.login.LoginActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyInfoContract.View {
@@ -32,6 +38,7 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
 
     Button btnMbtiLink;
     Button btnConfirm;
+    Button btnQuit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +72,10 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         btnMbtiLink.setOnClickListener(view -> openLinkDialog());
 
         btnConfirm = findViewById(R.id.my_info_btn_confirm);
-        btnConfirm.setOnClickListener(view -> {
-            //수정하기 버튼
-            modify();
-        });
+        btnConfirm.setOnClickListener(view -> { modify(); });
+
+        btnQuit = findViewById(R.id.my_info_btn_quit);
+        btnQuit.setOnClickListener(view -> { quitDialog(UserRepository.getInstance().getUser().email); });
     }
 
     private void openLinkDialog() {
@@ -81,6 +88,21 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
                 .setNegativeButton(R.string.no, null)
                 .show();
     }
+
+    private void quitDialog(String email){//회원 탈퇴시 회원 재인증을 하는 다이얼로그 창 띄우기
+        final EditText et = new EditText(MyInfoActivity.this);
+        new AlertDialog.Builder(MyInfoActivity.this,
+                android.R.style.Theme_DeviceDefault_Light_Dialog)
+                .setMessage("비밀번호를 입력하시오")
+                .setView(et)
+                .setPositiveButton("탈퇴", (dialog, which) ->{
+                    presenter.quitReauth(email, et.getText().toString());
+                })
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+
 
     @Override
     public void setPasswordError(Integer passwordError) {
@@ -119,7 +141,7 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
             presenter.characteristic(uid, bloodType, constellation, mbti);
         }
         else{//비번도 바꿈
-            presenter.reauth(UserRepository.getInstance().getUser().email, etPassword.getText().toString(),
+            presenter.pwReauth(UserRepository.getInstance().getUser().email, etPassword.getText().toString(),
                     etNewPassword.getText().toString(), etNewPwConfirm.getText().toString());
         }
     }
@@ -129,5 +151,12 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         startActivity(intent);
         finish();
         Toast.makeText(getApplicationContext(), "회원 정보 수정 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    public void goLogin(){
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
+        Toast.makeText(getApplicationContext(), "회원 탈퇴 완료", Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,12 +6,14 @@ public interface MyInfoContract {
         void setPwConfirmError(Integer pwConfirmError);
         void setDefaultData(String email, String bloodType, String constellation, String mbti);
         void goHome();
+        void goLogin();
     }
     interface Presenter {
         void init();
         boolean isPasswordValid(String password);
         boolean isPwConfirmValid(String password, String pwConfirm);
         void characteristic(String uid, String bloodType, String constellation, String mbti);
-        void reauth(String email, String password, String newPw, String newConfPw);
+        void pwReauth(String email, String password, String newPw, String newConfPw);
+        void quitReauth(String email, String password);
     }
 }
