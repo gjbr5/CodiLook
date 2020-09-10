@@ -51,7 +51,7 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
     }
 
     @Override
-    public void characteristic(String uid, String bloodType, String constellation, String mbti){
+    public void characteristic(String email, String password, String uid, String bloodType, String constellation, String mbti){
         if (bloodType.equals("--")) bloodType = "";
         else bloodType = bloodType.replace("형", "");
 
@@ -64,16 +64,25 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
         final String finalConstellation = constellation;
         final String finalMbti = mbti;
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/" + uid);
-        System.out.println("ref : " + ref + "blood : " + finalBloodType);
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("BloodType", finalBloodType);
-        childUpdates.put("Constellation", finalConstellation);
-        childUpdates.put("MBTI", finalMbti);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/" + uid);
+                System.out.println("ref : " + ref + "blood : " + finalBloodType);
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("BloodType", finalBloodType);
+                childUpdates.put("Constellation", finalConstellation);
+                childUpdates.put("MBTI", finalMbti);
 
-        ref.updateChildren(childUpdates);
+                ref.updateChildren(childUpdates);
+                view.goHome();
+            }else if(task.getException() != null){
+                view.makeToast("비밀번호가 맞지 않습니다.");
+            }
+        });
 
-        view.goHome();
+
     }
 
     @Override
@@ -88,13 +97,12 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
                 if (!isPasswordValid(newPw)) return;
                 if (!isPwConfirmValid(newPw, newConfPw)) return;
                 try{firebaseUser.updatePassword(newPw);
-                    System.out.println("비밀번호 변경 성공");
                     view.goHome();
                 }catch(Exception e){
-                    System.out.println("비밀번호 변경 실패");
+                    view.makeToast("비밀번호 변경 실패");
                 }
             }else if(task.getException() != null){
-                System.out.println("로그인 실패");
+                view.makeToast("비밀번호가 맞지 않습니다.");
             }
         });
     }
@@ -108,7 +116,7 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
                 FirebaseAuth.getInstance().getCurrentUser().delete();
                 view.goLogin();
             }else if(task.getException() != null){
-                System.out.println("인증 실패");
+                view.makeToast("비밀번호가 맞지 않습니다.");
             }
         });
     }

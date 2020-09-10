@@ -135,10 +135,14 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         String constellation = spConstellation.getSelectedItem().toString();
         String mbti = spMbti.getSelectedItem().toString();
 
-        if(etPassword.getText().toString().equals("") &&//비번은 안바꿈 사용자 특성만 바꿈
+        if((!etPassword.getText().toString().equals("")) &&//비번은 안바꿈 사용자 특성만 바꿈
                 etNewPassword.getText().toString().equals("") &&
                 etNewPwConfirm.getText().toString().equals("")){
-            presenter.characteristic(uid, bloodType, constellation, mbti);
+            presenter.characteristic(UserRepository.getInstance().getUser().email,
+                    etPassword.getText().toString(), uid, bloodType, constellation, mbti);
+        }
+        else if(etPassword.getText().toString().equals("")){
+            Toast.makeText(getApplicationContext(), "비밀번호를 입력하시오", Toast.LENGTH_SHORT).show();
         }
         else{//비번도 바꿈
             presenter.pwReauth(UserRepository.getInstance().getUser().email, etPassword.getText().toString(),
@@ -158,5 +162,9 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         startActivity(intent);
         finish();
         Toast.makeText(getApplicationContext(), "회원 탈퇴 완료", Toast.LENGTH_SHORT).show();
+    }
+
+    public void makeToast(String str){
+        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
     }
 }
