@@ -14,7 +14,7 @@ public interface CodiContract {
 
         void setNextEnable(boolean enable);
 
-        void setRatingText(String ratingText);
+        void setRating(Float rating);
     }
 
     interface Presenter {

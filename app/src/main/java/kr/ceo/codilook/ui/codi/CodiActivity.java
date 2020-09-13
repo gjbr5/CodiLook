@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
@@ -34,18 +35,17 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     private CodiContract.Presenter presenter;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_codi);
 
+        ArrayList<Codi> codiList = getIntent().getParcelableArrayListExtra("Codi");
         presenter = new CodiPresenter(this,
                 StorageRepository.getInstance(getApplication()),
-                UserRepository.getInstance(),
-                (ArrayList<Codi>) getIntent().getSerializableExtra("Codi"));
+                UserRepository.getInstance(), codiList);
 
         imgBtnPrev = findViewById(R.id.codi_img_btn_prev);
-        imgBtnPrev.setEnabled(false);
+        setPrevEnable(false);
         imgBtnPrev.setOnClickListener(v -> presenter.prevImage());
 
         imgCodi = findViewById(R.id.codi_img_codi);
@@ -64,9 +64,10 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
 
         tvCodiName = findViewById(R.id.codi_tv_codi_name);
         ratingCodiScore = findViewById(R.id.codi_rating_codi_score);
-        ratingCodiScore.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> presenter.onRatingChanged(rating));
+        ratingCodiScore.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (fromUser) presenter.onRatingChanged(rating);
+        });
         tvRating = findViewById(R.id.codi_tv_rating);
-
     }
 
     @Override
@@ -76,10 +77,14 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     }
 
     @Override
-    public void setRatingText(String ratingText) {
-        if (ratingText == null)
+    public void setRating(Float rating) {
+        if (rating == null) {
             tvRating.setText(R.string.score);
-        tvRating.setText(ratingText);
+            ratingCodiScore.setRating(0);
+        } else {
+            tvRating.setText(String.format(Locale.getDefault(), "Score: %f", rating));
+            ratingCodiScore.setRating(rating);
+        }
     }
 
     @Override
@@ -90,8 +95,7 @@ public class CodiActivity extends BaseNavigationDrawerActivity implements CodiCo
     @Override
     public void showImage(Bitmap bitmap, Float score) {
         imgCodi.setImageBitmap(bitmap);
-        if (score != null)
-            ratingCodiScore.setRating(score);
+        setRating(score);
     }
 
     @Override

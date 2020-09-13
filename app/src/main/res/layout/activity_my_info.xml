@@ -63,8 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/my_info_et_password"
-                android:text="현재 PW"
+                android:text="@string/prompt_password"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
@@ -74,8 +73,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:hint="PW 변경을 원하시면 입력하시오."
                 android:autofillHints="password"
+                android:hint="@string/prompt_edit_info"
                 android:inputType="textPassword"
                 android:textSize="16sp" />
 
@@ -92,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/my_info_et_new_password"
-                android:text="새 PW"
+                android:text="@string/prompt_new_pass"
                 android:textSize="18sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
@@ -103,8 +101,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:hint="PW 변경을 원하시면 입력하시오."
                 android:autofillHints="password"
+                android:hint="@string/prompt_edit_password"
                 android:inputType="textPassword"
                 android:textSize="16sp" />
 
@@ -121,9 +119,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:labelFor="@id/my_info_et_new_pw_confirm"
-                android:text="새 PW 확인"
-                android:textSize="14sp"
+                android:text="@string/prompt_new_pass_confirm"
+                android:textSize="12sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 
@@ -132,8 +129,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:hint="PW 변경을 원하시면 입력하시오."
                 android:autofillHints="password"
+                android:hint="@string/prompt_edit_password"
                 android:inputType="textPassword"
                 android:textSize="16sp" />
 
@@ -245,7 +242,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="탈퇴하기"
+        android:text="@string/quit_confirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_info_tl_form" />
 

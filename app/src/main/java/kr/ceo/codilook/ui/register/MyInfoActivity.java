@@ -4,41 +4,30 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
-import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.ui.login.LoginActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyInfoContract.View {
 
-    MyInfoContract.Presenter presenter;
+    private MyInfoContract.Presenter presenter;
 
-    TextView tvEmail;
+    private TextView tvEmail;
 
-    EditText etPassword;
-    EditText etNewPassword;
-    EditText etNewPwConfirm;
+    private EditText etPassword;
+    private EditText etNewPassword;
+    private EditText etNewPwConfirm;
 
-    Spinner spBloodType;
-    Spinner spConstellation;
-    Spinner spMbti;
-
-    Button btnMbtiLink;
-    Button btnConfirm;
-    Button btnQuit;
+    private Spinner spBloodType;
+    private Spinner spConstellation;
+    private Spinner spMbti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,36 +35,49 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         setContentView(R.layout.activity_my_info);
 
         presenter = new MyInfoPresenter(this, UserRepository.getInstance());
-        initView();
-        presenter.init();
-    }
 
-    private void initView() {
         tvEmail = findViewById(R.id.my_info_tv_email);
         etPassword = findViewById(R.id.my_info_et_password);
+        etPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) presenter.isPasswordValid(etPassword.getText().toString());
+        });
+
         etNewPassword = findViewById(R.id.my_info_et_new_password);
         etNewPassword.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus)
-                presenter.isPasswordValid(((EditText) v).getText().toString());
+            if (!hasFocus) presenter.isNewPasswordValid(etNewPassword.getText().toString());
         });
+
         etNewPwConfirm = findViewById(R.id.my_info_et_new_pw_confirm);
         etNewPwConfirm.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus)
-                presenter.isPwConfirmValid(etPassword.getText().toString(), ((EditText) v).getText().toString());
+                presenter.isPwConfirmValid(etNewPassword.getText().toString(),
+                        etNewPwConfirm.getText().toString());
         });
 
         spBloodType = findViewById(R.id.my_info_sp_blood_type);
         spConstellation = findViewById(R.id.my_info_sp_constellation);
         spMbti = findViewById(R.id.my_info_sp_mbti);
 
-        btnMbtiLink = findViewById(R.id.my_info_btn_mbti_link);
-        btnMbtiLink.setOnClickListener(view -> openLinkDialog());
+        findViewById(R.id.my_info_btn_mbti_link).setOnClickListener(view -> openLinkDialog());
 
-        btnConfirm = findViewById(R.id.my_info_btn_confirm);
-        btnConfirm.setOnClickListener(view -> { modify(); });
+        //수정하기 버튼
+        findViewById(R.id.my_info_btn_confirm).setOnClickListener(view -> {
+            String password = etPassword.getText().toString();
+            String newPassword = etNewPassword.getText().toString();
+            String newPwConfirm = etNewPwConfirm.getText().toString();
+            String bloodType = spBloodType.getSelectedItem().toString();
+            String constellation = spConstellation.getSelectedItem().toString();
+            String mbti = spMbti.getSelectedItem().toString();
+            presenter.updateInfo(password, newPassword, newPwConfirm, bloodType, constellation, mbti);
+        });
 
-        btnQuit = findViewById(R.id.my_info_btn_quit);
-        btnQuit.setOnClickListener(view -> { quitDialog(UserRepository.getInstance().getUser().email); });
+        findViewById(R.id.my_info_btn_quit).setOnClickListener(view -> openQuitDialog());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.initView();
     }
 
     private void openLinkDialog() {
@@ -89,82 +91,68 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
                 .show();
     }
 
-    private void quitDialog(String email){//회원 탈퇴시 회원 재인증을 하는 다이얼로그 창 띄우기
-        final EditText et = new EditText(MyInfoActivity.this);
-        new AlertDialog.Builder(MyInfoActivity.this,
-                android.R.style.Theme_DeviceDefault_Light_Dialog)
-                .setMessage("비밀번호를 입력하시오")
-                .setView(et)
-                .setPositiveButton("탈퇴", (dialog, which) ->{
-                    presenter.quitReauth(email, et.getText().toString());
-                })
-                .setNegativeButton("취소", null)
+    private void openQuitDialog() {//회원 탈퇴시 회원 재인증을 하는 다이얼로그 창 띄우기
+        new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog)
+                .setMessage(R.string.prompt_quit)
+                .setPositiveButton(R.string.yes, (dialog, which) -> presenter.withdraw(etPassword.getText().toString()))
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
-
-
     @Override
     public void setPasswordError(Integer passwordError) {
-        etNewPassword.setError(passwordError == null ? null : getString(passwordError));
+        etPassword.setError(passwordError == null ? null : getString(passwordError));
     }
 
     @Override
-    public void setPwConfirmError(Integer pwConfirmError) {
-        etNewPwConfirm.setError(pwConfirmError == null ? null : getString(pwConfirmError));
+    public void setNewPasswordError(Integer newPasswordError) {
+        etNewPassword.setError(newPasswordError == null ? null : getString(newPasswordError));
+    }
+
+    @Override
+    public void setNewPwConfirmError(Integer newPwConfirmError) {
+        etNewPwConfirm.setError(newPwConfirmError == null ? null : getString(newPwConfirmError));
     }
 
     @Override
     public void setDefaultData(String email, String bloodType, String constellation, String mbti) {
         tvEmail.setText(email);
-        for (int i = 1; i < 5; i++)
-            if (bloodType.equals(spBloodType.getItemAtPosition(i))) spBloodType.setSelection(i);
 
-        for (int i = 1; i < 13; i++) {
-            String str = spConstellation.getItemAtPosition(i).toString();
-            if (constellation.equals(str.substring(0, str.indexOf("("))))//별자리 뒤의 날짜 파싱
+        for (int i = 0; i < spBloodType.getCount(); i++) {
+            String item = spBloodType.getItemAtPosition(i).toString();
+            if (item.startsWith(bloodType)) {
+                spBloodType.setSelection(i);
+                break;
+            }
+        }
+
+        for (int i = 0; i < spConstellation.getCount(); i++) {
+            String item = spConstellation.getItemAtPosition(i).toString();
+            if (item.startsWith(constellation)) {
                 spConstellation.setSelection(i);
+                break;
+            }
         }
-        for (int i = 1; i < 17; i++)
-            if (mbti.equals(spMbti.getItemAtPosition(i))) spMbti.setSelection(i);
-    }
 
-    public void modify(){
-        String uid = UserRepository.getInstance().getUser().uid;
-        String bloodType = spBloodType.getSelectedItem().toString();
-        String constellation = spConstellation.getSelectedItem().toString();
-        String mbti = spMbti.getSelectedItem().toString();
-
-        if((!etPassword.getText().toString().equals("")) &&//비번은 안바꿈 사용자 특성만 바꿈
-                etNewPassword.getText().toString().equals("") &&
-                etNewPwConfirm.getText().toString().equals("")){
-            presenter.characteristic(UserRepository.getInstance().getUser().email,
-                    etPassword.getText().toString(), uid, bloodType, constellation, mbti);
-        }
-        else if(etPassword.getText().toString().equals("")){
-            Toast.makeText(getApplicationContext(), "비밀번호를 입력하시오", Toast.LENGTH_SHORT).show();
-        }
-        else{//비번도 바꿈
-            presenter.pwReauth(UserRepository.getInstance().getUser().email, etPassword.getText().toString(),
-                    etNewPassword.getText().toString(), etNewPwConfirm.getText().toString());
+        for (int i = 0; i < spMbti.getCount(); i++) {
+            if (spMbti.getItemAtPosition(i).equals(mbti)) {
+                spMbti.setSelection(i);
+                break;
+            }
         }
     }
 
-    public void goHome(){
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+    public void goHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();
-        Toast.makeText(getApplicationContext(), "회원 정보 수정 완료", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "회원 정보 수정 완료", Toast.LENGTH_SHORT).show();
     }
 
-    public void goLogin(){
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+    public void goLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
-        Toast.makeText(getApplicationContext(), "회원 탈퇴 완료", Toast.LENGTH_SHORT).show();
-    }
-
-    public void makeToast(String str){
-        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "회원 탈퇴 완료", Toast.LENGTH_SHORT).show();
     }
 }

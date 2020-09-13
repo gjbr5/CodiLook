@@ -1,17 +1,8 @@
 package kr.ceo.codilook.ui.register;
 
-import android.widget.Toast;
+import android.util.Log;
 
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.LoginFormValidateHelper;
 import kr.ceo.codilook.model.User;
 import kr.ceo.codilook.model.UserRepository;
@@ -20,20 +11,20 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
     MyInfoContract.View view;
     UserRepository userRepository;
 
-    public MyInfoPresenter(MyInfoContract.View view, UserRepository loginRepository) {
+    public MyInfoPresenter(MyInfoContract.View view, UserRepository userRepository) {
         this.view = view;
-        this.userRepository = loginRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void init() {
-        String email = userRepository.getUser().email;
-        User.UserData data = userRepository.getUser().userData;
-        String blood = data.bloodType + "형";
-        String constellation = data.constellation.toString();
-        String mbti = data.mbti.toString();
-        view.setDefaultData(email, blood, constellation, mbti);
-        System.out.println("blood : " + blood + ", cons : " + constellation + ", mbti : " + mbti);
+    public void initView() {
+        User user = userRepository.getUser();
+        String email = user.email;
+        User.UserData data = user.userData;
+        String bloodType = data.getBloodType() == null ? "--" : data.getBloodType().name();
+        String constellation = data.getConstellation() == null ? "--" : data.getConstellation().name();
+        String mbti = data.getMbti() == null ? "--" : data.getMbti().name();
+        view.setDefaultData(email, bloodType, constellation, mbti);
     }
 
     @Override
@@ -44,81 +35,54 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
     }
 
     @Override
-    public boolean isPwConfirmValid(String password, String pwConfirm) {
-        Integer error = LoginFormValidateHelper.validatePwConfirm(password, pwConfirm);
-        view.setPwConfirmError(error);
+    public boolean isNewPasswordValid(String newPassword) {
+        Integer error = LoginFormValidateHelper.validatePassword(newPassword);
+        view.setNewPasswordError(error);
         return error == null;
     }
 
     @Override
-    public void characteristic(String email, String password, String uid, String bloodType, String constellation, String mbti){
-        if (bloodType.equals("--")) bloodType = "";
+    public boolean isPwConfirmValid(String password, String pwConfirm) {
+        Integer error = LoginFormValidateHelper.validatePwConfirm(password, pwConfirm);
+        view.setNewPwConfirmError(error);
+        return error == null;
+    }
+
+    @Override
+    public void updateInfo(String password, String newPassword, String newPwConfirm, String bloodType, String constellation, String mbti) {
+        if (!isPasswordValid(password)) return;
+        if (!newPassword.isEmpty() && !isNewPasswordValid(newPassword)) return;
+        if (!newPwConfirm.isEmpty() && !isPwConfirmValid(newPassword, newPwConfirm)) return;
+
+        if ("--".equals(bloodType)) bloodType = "";
         else bloodType = bloodType.replace("형", "");
 
-        if (mbti.equals("--")) mbti = "";
+        if ("--".equals(mbti)) mbti = "";
 
-        if (constellation.equals("--")) constellation = "";
+        if ("--".equals(constellation)) constellation = "";
         else constellation = constellation.substring(0, constellation.indexOf("("));
 
-        final String finalBloodType = bloodType;
-        final String finalConstellation = constellation;
-        final String finalMbti = mbti;
+        String finalBloodType = bloodType;
+        String finalConstellation = constellation;
+        String finalMbti = mbti;
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/" + uid);
-                System.out.println("ref : " + ref + "blood : " + finalBloodType);
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("BloodType", finalBloodType);
-                childUpdates.put("Constellation", finalConstellation);
-                childUpdates.put("MBTI", finalMbti);
-
-                ref.updateChildren(childUpdates);
-                view.goHome();
-            }else if(task.getException() != null){
-                view.makeToast("비밀번호가 맞지 않습니다.");
-            }
-        });
-
-
+        userRepository.reAuth(password, aVoid -> {
+            userRepository.updateInfo(finalBloodType, finalConstellation, finalMbti);
+            if (!newPassword.isEmpty())
+                userRepository.updatePassword(newPassword);
+            view.goHome();
+        }, e -> view.setPasswordError(R.string.wrong_password));
     }
 
     @Override
-    public void pwReauth(String email, String password, String newPw, String newConfPw){
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        System.out.println("firebaseUser : " + firebaseUser);
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                System.out.println("로그인 성공");
-                if (!isPasswordValid(newPw)) return;
-                if (!isPwConfirmValid(newPw, newConfPw)) return;
-                try{firebaseUser.updatePassword(newPw);
-                    view.goHome();
-                }catch(Exception e){
-                    view.makeToast("비밀번호 변경 실패");
-                }
-            }else if(task.getException() != null){
-                view.makeToast("비밀번호가 맞지 않습니다.");
-            }
-        });
-    }
-
-    @Override
-    public void quitReauth(String email, String password){
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        firebaseUser.reauthenticate(credential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                FirebaseAuth.getInstance().getCurrentUser().delete();
-                view.goLogin();
-            }else if(task.getException() != null){
-                view.makeToast("비밀번호가 맞지 않습니다.");
-            }
-        });
+    public void withdraw(String password) {
+        if (!isPasswordValid(password)) return;
+        userRepository.withdraw(password,
+                aVoid -> view.goLogin(),
+                e -> {
+                    Log.e("MyInfoPresenter.withdraw", e.toString());
+                    view.setPasswordError(R.string.wrong_password);
+                });
     }
 
 }

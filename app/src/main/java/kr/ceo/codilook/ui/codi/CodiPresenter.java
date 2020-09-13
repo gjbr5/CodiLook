@@ -112,7 +112,7 @@ public class CodiPresenter implements CodiContract.Presenter {
 
     @Override
     public void onRatingChanged(float rating) {
-        view.setRatingText("Score: " + rating);
+        view.setRating(rating);
         int integerRating = floatRatingToIntegerRating(rating);
         userRepository.getUser().addScore(imgList.get(codiNum).getCodi(), integerRating);
     }

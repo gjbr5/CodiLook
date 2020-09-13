@@ -8,75 +8,132 @@ import java.util.Set;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public enum MBTI implements Adjectivizable {
-    ENFJ, ENFP, ENTJ, ENTP, ESFJ, ESFP, ESTJ, ESTP, INFJ, INFP, INTJ, INTP, ISFJ, ISFP, ISTJ, ISTP;
-
-    @Override
-    public Set<Adjective> toAdjective() {
-        Set<Adjective> set = new HashSet<>();
-
-        switch (this) {
-            case ENFJ:
-                set.add(Adjective.로맨틱한_패션을_선호한다);
-                set.add(Adjective.유행에_민감하다);
-                set.add(Adjective.활동적이다);
-                break;
-            case ENFP:
-                set.add(Adjective.고정관념에_얽매이지_않는다);
-                set.add(Adjective.스타일이_다양하다);
-                set.add(Adjective.유행에_민감하다);
-                break;
-            case ENTJ:
-                set.add(Adjective.깔끔한_옷을_선호한다);
-                break;
-            case ENTP:
-                set.add(Adjective.고정관념에_얽매이지_않는다);
-                set.add(Adjective.남성적이다);
-                set.add(Adjective.스타일이_다양하다);
-                break;
-            case ESFP:
-                set.add(Adjective.고정관념에_얽매이지_않는다);
-                set.add(Adjective.활동적이다);
-                break;
-            case ESTJ:
-                set.add(Adjective.발랄하다);
-                break;
-            case ESTP:
-                set.add(Adjective.스타일이_다양하다);
-                set.add(Adjective.자유분방하다);
-                break;
-            case INFJ:
-            case INTJ:
-                set.add(Adjective.개성이_강하다);
-                set.add(Adjective.고정관념에_얽매이지_않는다);
-                break;
-            case INFP:
-                set.add(Adjective.고정관념에_얽매이지_않는다);
-                set.add(Adjective.로맨틱한_패션을_선호한다);
-                break;
-            case INTP:
-                set.add(Adjective.개방적이다);
-                set.add(Adjective.패션감각이_둔하다);
-                set.add(Adjective.활동적이다);
-                break;
-            case ISFJ:
-                set.add(Adjective.보수적이다);
-                break;
-            case ISFP:
-                set.add(Adjective.개성이_강하다);
-                set.add(Adjective.예술가적_기질이_있다);
-                break;
-            case ISTJ:
-                set.add(Adjective.보수적이다);
-                set.add(Adjective.스타일이_다양하다);
-                break;
-            case ISTP:
-                set.add(Adjective.깔끔한_옷을_선호한다);
-                set.add(Adjective.단순하다);
-                break;
-            case ESFJ:
-            default:
-                break;
+    ENFJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.로맨틱한_패션을_선호한다);
+            set.add(Adjective.유행에_민감하다);
+            set.add(Adjective.활동적이다);
+            return set;
         }
-        return set;
-    }
+    }, ENFP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            set.add(Adjective.스타일이_다양하다);
+            set.add(Adjective.유행에_민감하다);
+            return set;
+        }
+    }, ENTJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.깔끔한_옷을_선호한다);
+            return set;
+        }
+    }, ENTP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            set.add(Adjective.남성적이다);
+            set.add(Adjective.스타일이_다양하다);
+            return set;
+        }
+    }, ESFJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            return new HashSet<>();
+        }
+    }, ESFP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            set.add(Adjective.활동적이다);
+            return set;
+        }
+    }, ESTJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.발랄하다);
+            return set;
+        }
+    }, ESTP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.스타일이_다양하다);
+            set.add(Adjective.자유분방하다);
+            return set;
+        }
+    }, INFJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.개성이_강하다);
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            return set;
+        }
+    }, INFP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            set.add(Adjective.로맨틱한_패션을_선호한다);
+            return set;
+        }
+    }, INTJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.개성이_강하다);
+            set.add(Adjective.고정관념에_얽매이지_않는다);
+            return set;
+        }
+    }, INTP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.개방적이다);
+            set.add(Adjective.패션감각이_둔하다);
+            set.add(Adjective.활동적이다);
+            return set;
+        }
+    }, ISFJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.보수적이다);
+            return set;
+        }
+    }, ISFP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.개성이_강하다);
+            set.add(Adjective.예술가적_기질이_있다);
+            return set;
+        }
+    }, ISTJ {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.보수적이다);
+            set.add(Adjective.스타일이_다양하다);
+            return set;
+        }
+    }, ISTP {
+        @Override
+        public Set<Adjective> toAdjective() {
+            Set<Adjective> set = new HashSet<>();
+            set.add(Adjective.깔끔한_옷을_선호한다);
+            set.add(Adjective.단순하다);
+            return set;
+        }
+    };
+    public static final String DB_KEY = "MBTI";
 }

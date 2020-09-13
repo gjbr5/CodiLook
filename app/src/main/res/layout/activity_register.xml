@@ -92,7 +92,7 @@
                 android:gravity="center"
                 android:labelFor="@id/register_et_pw_confirm"
                 android:text="@string/prompt_password_confirm"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="italic"
                 android:typeface="serif" />
 

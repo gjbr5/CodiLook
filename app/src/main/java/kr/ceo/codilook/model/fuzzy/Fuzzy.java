@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -38,28 +39,17 @@ public class Fuzzy {
         }
     }
 
-
-    @SuppressWarnings("ConstantConditions")
-    private void addResult(Map<Codi, Integer> total, Adjectivizable adjectivizable) {
-        for (Adjective adj : adjectivizable.toAdjective()) {
-            Map<Codi, Integer> membership = memberships.get(adj);
-            for (Codi codi : membership.keySet()) {
-                Integer prev = total.get(codi);
-                total.put(codi, (prev == null ? 0 : prev) + membership.get(codi));
-            }
-        }
-    }
-
     public ArrayList<Codi> getCodiList(User.UserData userData, Map<Codi, Integer> scores) {
         Map<Codi, Integer> total = new TreeMap<>();
-        addResult(total, userData.bloodType);
-        addResult(total, userData.constellation);
-        addResult(total, userData.mbti);
-        for (Map.Entry<Codi, Integer> score : scores.entrySet()) {
-            @SuppressWarnings("ConstantConditions")
-            Integer newVal = (int) (total.get(score.getKey()) * starScoreToWeight(score.getValue()));
-            total.put(score.getKey(), newVal);
+        for (Adjectivizable adjectivizable : userData.toArray()) {
+            for (Adjective adjective : adjectivizable.toAdjective()) {
+                Objects.requireNonNull(memberships.get(adjective)).forEach((codi, integer) ->
+                        total.merge(codi, integer, Integer::sum));
+            }
         }
+
+        scores.forEach((codi, score) ->
+                total.put(codi, (int) (Objects.requireNonNull(total.get(codi)) * scoreToWeight(score))));
 
         return total.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -67,7 +57,7 @@ public class Fuzzy {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private double starScoreToWeight(int score) {
+    private double scoreToWeight(int score) {
         switch (score) {
             case -5:
                 return 0.5;

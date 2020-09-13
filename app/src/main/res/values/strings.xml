@@ -4,7 +4,11 @@
     <string name="desc_menu_bar">메뉴바</string>
     <string name="prompt_email">EMAIL</string>
     <string name="prompt_password">PW</string>
-    <string name="prompt_password_confirm">PW확인</string>
+    <string name="prompt_password_confirm">PW 확인</string>
+    <string name="prompt_edit_info">정보를 수정하시려면 입력해주세요.</string>
+    <string name="prompt_edit_password">비밀번호를 변경하시려면 입력해주세요.</string>
+    <string name="prompt_new_pass">새 PW</string>
+    <string name="prompt_new_pass_confirm">새 PW 확인</string>
     <string name="prompt_bloodtype">혈액형</string>
     <string name="prompt_constellation">별자리</string>
     <string name="prompt_mbti">MBTI</string>
@@ -41,6 +45,9 @@
     <string name="whats_new">업데이트 내역</string>
     <string name="my_info">내 정보</string>
     <string name="edit_confirm">수정하기</string>
+    <string name="quit_confirm">탈퇴하기</string>
     <string name="progress_login">로그인 중…</string>
     <string name="progress_getting_info">사용자 정보 가져오는 중…</string>
+    <string name="prompt_quit">정말 탈퇴하시겠습니까?</string>
+    <string name="set_user_info">사용자 정보를 하나 이상 입력해주세요</string>
 </resources>
