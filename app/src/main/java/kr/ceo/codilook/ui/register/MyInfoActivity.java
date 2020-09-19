@@ -151,8 +151,9 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
 
     public void goLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         Toast.makeText(this, "회원 탈퇴 완료", Toast.LENGTH_SHORT).show();
+        finishAffinity();
+        startActivity(intent);
     }
 }

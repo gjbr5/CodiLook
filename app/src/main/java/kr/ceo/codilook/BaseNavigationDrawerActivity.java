@@ -38,10 +38,13 @@ public class BaseNavigationDrawerActivity extends AppCompatActivity {
                 break;
             case R.id.nav_logout:
                 intent.putExtra("logout", true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.setClass(BaseNavigationDrawerActivity.this, LoginActivity.class);
+                finishAffinity();
                 break;
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        drawerLayout.close();
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         return true;
     };

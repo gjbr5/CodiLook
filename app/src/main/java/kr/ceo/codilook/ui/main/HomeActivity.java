@@ -39,7 +39,11 @@ public class HomeActivity extends BaseNavigationDrawerActivity implements HomeCo
 
         imgCodi = findViewById(R.id.home_img_codi);
         gifImg = new GlideDrawableImageViewTarget(imgCodi);
-        //setRandomImage();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         presenter.setTimer();
     }
 
@@ -60,10 +64,11 @@ public class HomeActivity extends BaseNavigationDrawerActivity implements HomeCo
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         presenter.deleteTimer();
     }
+
 
     @Override
     public void setImage(Bitmap bitmap) {
