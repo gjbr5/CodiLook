@@ -52,7 +52,6 @@ public class HomeActivity extends BaseNavigationDrawerActivity implements HomeCo
         Intent intent = new Intent(this, CodiActivity.class);
         intent.putParcelableArrayListExtra("Codi", codiList);
         startActivity(intent);
-        finish();
     }
 
     @Override
