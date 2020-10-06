@@ -85,7 +85,10 @@ public class UserRepository {
     private void withdrawUser(OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
         FirebaseUser firebaseUser = Objects.requireNonNull(auth.getCurrentUser());
         firebaseUser.delete()
-                .addOnSuccessListener(onSuccessListener)
+                .addOnSuccessListener(aVoid -> {
+                    user = null;
+                    onSuccessListener.onSuccess(aVoid);
+                })
                 .addOnFailureListener(onFailureListener);
     }
 

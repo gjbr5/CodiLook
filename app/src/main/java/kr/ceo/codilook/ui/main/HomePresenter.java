@@ -26,7 +26,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     public HomePresenter(HomeContract.View view, UserRepository userRepository, StorageRepository storageRepository) {
         this.view = view;
-        this.userRepository=userRepository;
+        this.userRepository = userRepository;
         this.storageRepository = storageRepository;
     }
 
@@ -34,7 +34,7 @@ public class HomePresenter implements HomeContract.Presenter {
     public void recommend(InputStream inputStream) {
         Fuzzy fuzzy = new Fuzzy(inputStream);
         User user = userRepository.getUser();
-        if(user.userData.toArray().length==0) {
+        if (user.userData.toArray().length == 0) {
             view.startMyInfoActivity();
             return;
         }
