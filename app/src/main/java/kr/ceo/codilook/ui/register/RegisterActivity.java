@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.UserRepository;
+import kr.ceo.codilook.ui.codi.PrevCodiActivity;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
     private RegisterContract.Presenter presenter;
@@ -93,6 +94,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         // TODO: Dismiss Progress
         if (success) {
             setResult(Activity.RESULT_OK);
+//            Intent intent = new Intent(this, PrevCodiActivity.class);
+//            startActivity(intent);
             finish();
         } else {
             setResult(Activity.RESULT_CANCELED);

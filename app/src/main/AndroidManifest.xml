@@ -12,6 +12,7 @@
         <activity
             android:name=".BaseNavigationDrawerActivity"/>
         <activity android:name=".ui.codi.CodiActivity" />
+        <activity android:name=".ui.codi.PrevCodiActivity" />
         <activity android:name=".ui.main.LoadingActivity" />
         <activity android:name=".ui.main.HomeActivity" />
         <activity android:name=".ui.register.RegisterActivity" />

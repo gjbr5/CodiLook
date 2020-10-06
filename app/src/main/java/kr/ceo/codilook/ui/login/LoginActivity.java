@@ -14,10 +14,18 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.storage.StorageReference;
+
+import java.util.List;
+import java.util.Random;
+
 import kr.ceo.codilook.CustomProgressBar;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.PreferenceRepository;
+import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.UserRepository;
+import kr.ceo.codilook.model.fuzzy.Codi;
+import kr.ceo.codilook.ui.codi.PrevCodiActivity;
 import kr.ceo.codilook.ui.main.HomeActivity;
 import kr.ceo.codilook.ui.register.RegisterActivity;
 
@@ -37,7 +45,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         presenter = new LoginPresenter(this,
-                UserRepository.getInstance(), PreferenceRepository.getInstance(getApplication()));
+                UserRepository.getInstance(),
+                PreferenceRepository.getInstance(getApplication()));
         initView();
         if (getIntent().getBooleanExtra("logout", false))
             presenter.logout();
@@ -75,7 +84,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REGISTER_REQ_CODE && resultCode == Activity.RESULT_OK) {
-            onLoginComplete(true);
+            //onLoginComplete(true);
+            Intent intent = new Intent(this, PrevCodiActivity.class);
+            startActivity(intent);
         }
     }
 

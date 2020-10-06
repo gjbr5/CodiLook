@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.LoginFormValidateHelper;
 import kr.ceo.codilook.model.PreferenceRepository;
+import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.UserRepository;
 
 public class LoginPresenter implements LoginContract.Presenter {
@@ -15,6 +16,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     protected LoginContract.View view;
     protected UserRepository userRepository;
     protected PreferenceRepository preferenceRepository;
+    private StorageRepository storageRepository;
 
     public LoginPresenter(LoginContract.View view, UserRepository userRepository, PreferenceRepository preferenceRepository) {
         this.view = view;
