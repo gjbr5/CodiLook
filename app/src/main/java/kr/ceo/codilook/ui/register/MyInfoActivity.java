@@ -58,7 +58,7 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
         spConstellation = findViewById(R.id.my_info_sp_constellation);
         spMbti = findViewById(R.id.my_info_sp_mbti);
 
-        findViewById(R.id.my_info_btn_mbti_link).setOnClickListener(view -> openLinkDialog());
+        //findViewById(R.id.my_info_btn_mbti_link).setOnClickListener(view -> openLinkDialog());
 
         //수정하기 버튼
         findViewById(R.id.my_info_btn_confirm).setOnClickListener(view -> {
@@ -78,6 +78,9 @@ public class MyInfoActivity extends BaseNavigationDrawerActivity implements MyIn
     protected void onResume() {
         super.onResume();
         presenter.initView();
+        spBloodType.setEnabled(false);
+        spConstellation.setEnabled(false);
+        spMbti.setEnabled(false);
     }
 
     private void openLinkDialog() {
