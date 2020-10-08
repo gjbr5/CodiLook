@@ -22,6 +22,7 @@ public class Fuzzy {
 
     public Fuzzy(InputStream inputStream) {
         memberships = new TreeMap<>();
+
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("euc-kr")));
         try {
             String[] codis = br.readLine().split(",");
@@ -40,16 +41,26 @@ public class Fuzzy {
     }
 
     public ArrayList<Codi> getCodiList(User.UserData userData, Map<Codi, Integer> scores) {
-        Map<Codi, Integer> total = new TreeMap<>();
+        TreeMap<Codi, Double> total = new TreeMap<>();
         for (Adjectivizable adjectivizable : userData.toArray()) {
             for (Adjective adjective : adjectivizable.toAdjective()) {
-                Objects.requireNonNull(memberships.get(adjective)).forEach((codi, integer) ->
-                        total.merge(codi, integer, Integer::sum));
+                Map<Codi, Integer> membership = Objects.requireNonNull(memberships.get(adjective));
+                membership.forEach((codi, value) -> total.merge(codi, value.doubleValue(), Double::sum));
             }
         }
+        // 10 ~ 50 범위로 정규화
+        int nUserAdjects = userData.toArray().length;
+        total.replaceAll((codi, value) -> value * 40 / (21 * nUserAdjects) + 10);
 
-        scores.forEach((codi, score) ->
-                total.put(codi, (int) (Objects.requireNonNull(total.get(codi)) * scoreToWeight(score))));
+        // -35 ~ 35 범위로 정규화해 더함
+        scores.forEach((k, v) ->
+                total.compute(k, (codi, prev) ->
+                        (prev == null ? 0.0 : prev) + (v + 5) * 7.0 - 35));
+
+        // -15 ~ 15 범위로 정규화해 더함(비슷한 사용자)
+//        otherScores.forEach((k, v) ->
+//                total.compute(k, (codi, prev) ->
+//                        (prev == null ? 0.0 : prev) + (v + 5) * 3.0 - 15));
 
         return total.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -58,29 +69,6 @@ public class Fuzzy {
     }
 
     private double scoreToWeight(int score) {
-        switch (score) {
-            case -5:
-                return 0.5;
-            case -4:
-                return 0.6;
-            case -3:
-                return 0.7;
-            case -2:
-                return 0.8;
-            case -1:
-                return 0.9;
-            case 1:
-                return 1.1;
-            case 2:
-                return 1.2;
-            case 3:
-                return 1.3;
-            case 4:
-                return 1.4;
-            case 5:
-                return 1.5;
-            default:
-                return 1.0;
-        }
+        return 1.0 + (score * 0.1);
     }
 }

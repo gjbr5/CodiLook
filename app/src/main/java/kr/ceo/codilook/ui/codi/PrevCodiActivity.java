@@ -7,7 +7,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import java.util.Locale;
+
 import kr.ceo.codilook.BaseNavigationDrawerActivity;
 import kr.ceo.codilook.R;
 import kr.ceo.codilook.model.StorageRepository;
@@ -16,7 +18,6 @@ import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class PrevCodiActivity extends BaseNavigationDrawerActivity implements PrevCodiContract.View {
     private ImageView imgCodi;//코디 추천 이미지
-    private ImageButton imgBtnNext;//뒤로 가기
 
     private RatingBar ratingCodiScore;//코디 추천 별점
 
@@ -35,7 +36,8 @@ public class PrevCodiActivity extends BaseNavigationDrawerActivity implements Pr
 
         imgCodi = findViewById(R.id.prev_img_codi);
 
-        imgBtnNext = findViewById(R.id.prev_img_btn_next);
+        //뒤로 가기
+        ImageButton imgBtnNext = findViewById(R.id.prev_img_btn_next);
         imgBtnNext.setOnClickListener(v -> presenter.nextImage());
 
         tvCodiName = findViewById(R.id.prev_tv_codi_name);
