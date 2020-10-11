@@ -67,7 +67,7 @@ public class MyInfoPresenter implements MyInfoContract.Presenter {
         String finalMbti = mbti;
 
         userRepository.reAuth(password, aVoid -> {
-            userRepository.updateInfo(finalBloodType, finalConstellation, finalMbti);
+            //userRepository.updateInfo(finalBloodType, finalConstellation, finalMbti);
             if (!newPassword.isEmpty())
                 userRepository.updatePassword(newPassword);
             view.goHome();

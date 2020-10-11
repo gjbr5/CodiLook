@@ -160,7 +160,7 @@
                 android:layout_weight="8"
                 android:entries="@array/혈액형"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp" />
+                android:paddingBottom="10dp"/>
 
         </TableRow>
 
@@ -188,7 +188,7 @@
                 android:layout_weight="8"
                 android:entries="@array/별자리"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp" />
+                android:paddingBottom="10dp"/>
         </TableRow>
 
         <TableRow
@@ -216,7 +216,7 @@
                 android:entries="@array/mbti"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp" />
-
+<!--
             <Button
                 android:id="@+id/my_info_btn_mbti_link"
                 android:layout_width="0dp"
@@ -224,6 +224,7 @@
                 android:layout_weight="3"
                 android:text="@string/link_mbti"
                 android:textSize="14sp" />
+                -->
         </TableRow>
 
     </TableLayout>
