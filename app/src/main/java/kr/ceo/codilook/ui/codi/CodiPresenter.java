@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
-import java.util.concurrent.ThreadLocalRandom;
 
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.UserRepository;
@@ -39,7 +38,8 @@ public class CodiPresenter implements CodiContract.Presenter {
     private void showCodi() {
         try {
             ImageList list = imgList.get(codiNum);
-            Integer score = userRepository.getUser().score.get(list.getCodi());
+            Integer score = toUpdate.get(list.getCodi().name());
+            if (score == null) score = userRepository.getUser().score.get(list.getCodi());
             Bitmap image = list.getImage(imgNum);
             if (score != null)
                 view.showImage(image, integerRatingToFloatRating(score));
