@@ -40,7 +40,7 @@ public class Fuzzy {
         }
     }
 
-    public ArrayList<Codi> getCodiList(User.UserData userData, Map<Codi, Integer> scores) {
+    public ArrayList<Codi> getCodiList(User.UserData userData, Map<Codi, Integer> scores, Map<Codi, Integer> otherScores) {
         TreeMap<Codi, Double> total = new TreeMap<>();
         for (Adjectivizable adjectivizable : userData.toArray()) {
             for (Adjective adjective : adjectivizable.toAdjective()) {
@@ -58,9 +58,9 @@ public class Fuzzy {
                         (prev == null ? 0.0 : prev) + (v + 5) * 7.0 - 35));
 
         // -15 ~ 15 범위로 정규화해 더함(비슷한 사용자)
-//        otherScores.forEach((k, v) ->
-//                total.compute(k, (codi, prev) ->
-//                        (prev == null ? 0.0 : prev) + (v + 5) * 3.0 - 15));
+        otherScores.forEach((k, v) ->
+                total.compute(k, (codi, prev) ->
+                        (prev == null ? 0.0 : prev) + (v + 5) * 3.0 - 15));
 
         return total.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))

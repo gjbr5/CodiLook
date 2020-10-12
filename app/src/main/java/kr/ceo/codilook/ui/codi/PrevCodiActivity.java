@@ -3,7 +3,6 @@ package kr.ceo.codilook.ui.codi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,9 +16,8 @@ import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.ui.main.HomeActivity;
 
 public class PrevCodiActivity extends BaseNavigationDrawerActivity implements PrevCodiContract.View {
-    private ImageView imgCodi;//코디 추천 이미지
-
-    private RatingBar ratingCodiScore;//코디 추천 별점
+    private ImageView imgCodi; //코디 추천 이미지
+    private RatingBar ratingCodiScore; //코디 추천 별점
 
     private TextView tvCodiName;
     private TextView tvRating;
@@ -37,15 +35,15 @@ public class PrevCodiActivity extends BaseNavigationDrawerActivity implements Pr
         imgCodi = findViewById(R.id.prev_img_codi);
 
         //뒤로 가기
-        ImageButton imgBtnNext = findViewById(R.id.prev_img_btn_next);
-        imgBtnNext.setOnClickListener(v -> presenter.nextImage());
+        findViewById(R.id.prev_img_btn_next).setOnClickListener(v -> presenter.nextImage());
 
         tvCodiName = findViewById(R.id.prev_tv_codi_name);
+        tvRating = findViewById(R.id.prev_tv_rating);
+
         ratingCodiScore = findViewById(R.id.prev_rating_codi_score);
         ratingCodiScore.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if (fromUser) presenter.onRatingChanged(rating);
         });
-        tvRating = findViewById(R.id.prev_tv_rating);
 
         presenter.showCodi();
     }

@@ -4,4 +4,6 @@ import java.util.Set;
 
 public interface Adjectivizable {
     Set<Adjective> toAdjective();
+    String name();
+    String getType();
 }

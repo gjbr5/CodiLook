@@ -135,5 +135,9 @@ public enum MBTI implements Adjectivizable {
             return set;
         }
     };
-    public static final String DB_KEY = "MBTI";
+
+    @Override
+    public String getType() {
+        return "MBTI";
+    }
 }

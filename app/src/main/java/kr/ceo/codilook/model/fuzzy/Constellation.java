@@ -132,5 +132,9 @@ public enum Constellation implements Adjectivizable {
             return set;
         }
     };
-    public static final String DB_KEY = "Constellation";
+
+    @Override
+    public String getType() {
+        return "Constellation";
+    }
 }

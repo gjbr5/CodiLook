@@ -38,7 +38,7 @@ public class HomePresenter implements HomeContract.Presenter {
             view.startMyInfoActivity();
             return;
         }
-        view.startCodiActivity(fuzzy.getCodiList(user.userData, user.score));
+        view.startCodiActivity(fuzzy.getCodiList(user.userData, user.score, userRepository.getOtherScore()));
     }
 
     @Override

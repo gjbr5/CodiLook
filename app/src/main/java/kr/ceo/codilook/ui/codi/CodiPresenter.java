@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.UserRepository;
@@ -24,6 +25,7 @@ public class CodiPresenter implements CodiContract.Presenter {
     private UserRepository userRepository;
     private StorageRepository storageRepository;
     private Map<Integer, ImageList> imgList = new TreeMap<>();
+    private Map<String, Integer> toUpdate = new TreeMap<>();
 
     public CodiPresenter(CodiContract.View view, StorageRepository storageRepository, UserRepository userRepository, ArrayList<Codi> codiList) {
         this.view = view;
@@ -44,8 +46,7 @@ public class CodiPresenter implements CodiContract.Presenter {
             else
                 view.showImage(image, null);
             view.showTitle(list.getCodi().name());
-        } catch (NullPointerException | IndexOutOfBoundsException ignore) {
-        }
+        } catch (NullPointerException | IndexOutOfBoundsException ignore) {/* ignore */}
     }
 
     @Override
@@ -114,12 +115,12 @@ public class CodiPresenter implements CodiContract.Presenter {
     public void onRatingChanged(float rating) {
         view.setRating(rating);
         int integerRating = floatRatingToIntegerRating(rating);
-        userRepository.getUser().addScore(imgList.get(codiNum).getCodi(), integerRating);
+        toUpdate.put(imgList.get(codiNum).getCodi().name(), integerRating);
     }
 
     @Override
     public void applyChanges() {
-        userRepository.applyScore();
+        userRepository.applyScore(toUpdate);
     }
 
     private Float integerRatingToFloatRating(@Nullable Integer rating) {

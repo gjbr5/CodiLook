@@ -1,19 +1,24 @@
 package kr.ceo.codilook.ui.codi;
 
 import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
+
 import kr.ceo.codilook.model.StorageRepository;
 import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 
 public class PrevCodiPresenter implements PrevCodiContract.Presenter {
+    private Map<String, Integer> toUpdate = new TreeMap<>();
     private int codiNum = 0;
     private int imgNum = 0;
     private PrevCodiContract.View view;
     private UserRepository userRepository;
     private StorageRepository storageRepository;
-    public Codi codi;
+    private Codi codi;
 
     public PrevCodiPresenter(PrevCodiContract.View view, StorageRepository storageRepository, UserRepository userRepository) {
         this.view = view;
@@ -39,9 +44,8 @@ public class PrevCodiPresenter implements PrevCodiContract.Presenter {
         if (imgNum < 2) {
             imgNum += 1;
             showCodi();
-        }
-        else if (imgNum == 2) {
-            userRepository.applyScore();
+        } else if (imgNum == 2) {
+            userRepository.applyScore(toUpdate);
             view.goHomeActivity();
         }
     }
@@ -51,11 +55,12 @@ public class PrevCodiPresenter implements PrevCodiContract.Presenter {
         view.setRating(rating);
         int integerRating = floatRatingToIntegerRating(rating);
         userRepository.getUser().addScore(codi, integerRating);
+        toUpdate.put(codi.name(), floatRatingToIntegerRating(rating));
     }
 
     @Override
     public void applyChanges() {
-        userRepository.applyScore();
+        userRepository.applyScore(toUpdate);
     }
 
     private Integer floatRatingToIntegerRating(Float rating) {

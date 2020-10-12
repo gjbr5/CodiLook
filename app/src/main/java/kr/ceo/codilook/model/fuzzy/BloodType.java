@@ -50,5 +50,8 @@ public enum BloodType implements Adjectivizable {
         }
     };
 
-    public static final String DB_KEY = "BloodType";
+    @Override
+    public String getType() {
+        return "BloodType";
+    }
 }
