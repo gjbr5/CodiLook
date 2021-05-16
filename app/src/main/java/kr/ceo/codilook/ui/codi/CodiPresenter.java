@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -18,6 +19,9 @@ import kr.ceo.codilook.model.UserRepository;
 import kr.ceo.codilook.model.fuzzy.Codi;
 
 public class CodiPresenter implements CodiContract.Presenter {
+    private static final int CODI_CNT = 5;
+    private static final int IMG_CNT = 3;
+
     private int codiNum = 0;
     private int imgNum = 0;
     private CodiContract.View view;
@@ -30,7 +34,14 @@ public class CodiPresenter implements CodiContract.Presenter {
         this.view = view;
         this.storageRepository = storageRepository;
         this.userRepository = userRepository;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < CODI_CNT - 2; i++) {
+            addList(i, codiList.get(0));
+            codiList.remove(0);
+        }
+        // 랜덤한 코디 추가
+        Random random = new Random();
+        codiList.sort((x, y) -> random.nextInt(3) - 1);
+        for (int i = CODI_CNT - 2; i < CODI_CNT; i++) {
             addList(i, codiList.get(i));
         }
     }
@@ -58,13 +69,14 @@ public class CodiPresenter implements CodiContract.Presenter {
     }
 
     private void addList(int idx, Codi codi) {
+        System.out.println(idx + String.valueOf(codi));
         ImageList imageList = new ImageList(codi);
         imgList.put(idx, imageList); // Init imgList
 
         storageRepository.getCodiList(codi, listResult -> {
             Random random = new Random();
             List<StorageReference> listReference = listResult.getItems();
-            while (listReference.size() > 3)
+            while (listReference.size() > IMG_CNT)
                 listReference.remove(random.nextInt(listReference.size()));
             Log.d("getCodiList", listReference.toString());
             for (StorageReference reference : listReference) {
@@ -87,7 +99,7 @@ public class CodiPresenter implements CodiContract.Presenter {
     public void prevImage() {
         if (imgNum == 0) {
             codiNum -= 1;
-            imgNum = 2;
+            imgNum = IMG_CNT - 1;
         } else
             imgNum -= 1;
 
@@ -100,13 +112,13 @@ public class CodiPresenter implements CodiContract.Presenter {
 
     @Override
     public void nextImage() {
-        if (imgNum == 2) {
+        if (imgNum == IMG_CNT - 1) {
             codiNum += 1;
             imgNum = 0;
         } else
             imgNum += 1;
         view.setPrevEnable(true);
-        if (codiNum == 2 && imgNum == 2)
+        if (codiNum == CODI_CNT - 1 && imgNum == IMG_CNT - 1)
             view.setNextEnable(false);
         showCodi();
     }

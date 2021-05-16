@@ -18,9 +18,9 @@ import kr.ceo.codilook.model.fuzzy.Fuzzy;
 
 public class HomePresenter implements HomeContract.Presenter {
 
-    private HomeContract.View view;
-    private UserRepository userRepository;
-    private StorageRepository storageRepository;
+    private final HomeContract.View view;
+    private final UserRepository userRepository;
+    private final StorageRepository storageRepository;
 
     private Timer timer;
 
@@ -57,10 +57,10 @@ public class HomePresenter implements HomeContract.Presenter {
                         List<StorageReference> listReference = listResult.getItems();
                         int random = new Random().nextInt(listReference.size());
                         StorageReference ref = listReference.get(random);
-                        storageRepository.getImage(ref, bitmap -> view.setImage(bitmap));
+                        storageRepository.getImage(ref, view::setImage);
                     });
                 }, 2000);
-                handler.post(() -> view.setRandomImage());
+                handler.post(view::setRandomImage);
             }
         }, 0, 4000); //시작지연시간 0, 주기 3초
     }
